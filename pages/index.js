@@ -1,8 +1,8 @@
 import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
-import TherapistCard from '../components/TherapistCard'
 import SearchBar from '../components/SearchBar'
+import TherapistCard from '../components/TherapistCard'
 import WhatsAppFAB from '../components/WhatsAppFAB'
 import AccessibilityWidget from '../components/AccessibilityWidget'
 import Footer from '../components/Footer'
@@ -16,159 +16,134 @@ export default function Home() {
   const [type, setType] = useState('')
   const [query, setQuery] = useState('')
 
-  const AREAS = ['תל אביב והמרכז','ירושלים','חיפה והצפון','באר שבע והדרום','השרון','גוש דן']
-  const TYPES = ['שוודי','רקמות עמוקות','ספורט','הריון','שיאצו','רפלקסולוגיה','לימפה']
-
   useEffect(() => {
     fetchTherapists()
   }, [])
 
   useEffect(() => {
-    applyFilters()
-  }, [therapists, query, area, type])
+    let result = therapists
+    if (area) result = result.filter(t => t.area === area)
+    if (type) result = result.filter(t => t.types?.includes(type))
+    if (query) {
+      result = result.filter(t => 
+        t.name.toLowerCase().includes(query.toLowerCase()) || 
+        t.description?.toLowerCase().includes(query.toLowerCase()) ||
+        t.types?.some(type => type.includes(query))
+      )
+    }
+    setFiltered(result)
+  }, [area, type, query, therapists])
 
   async function fetchTherapists() {
-    const { data } = await supabase
+    setLoading(true)
+    const { data, error } = await supabase
       .from('therapists')
       .select('*')
       .eq('approved', true)
-      .order('featured', { ascending: false })
-      .order('created_at', { ascending: false })
-    setTherapists(data || [])
+    
+    if (!error && data) {
+      setTherapists(data)
+      setFiltered(data)
+    }
     setLoading(false)
   }
 
-  function applyFilters() {
-    let list = [...therapists]
-    if (query) {
-      const q = query.toLowerCase()
-      list = list.filter(t =>
-        t.name.toLowerCase().includes(q) ||
-        t.area.toLowerCase().includes(q) ||
-        (t.types || []).some(x => x.toLowerCase().includes(q)) ||
-        (t.description || '').toLowerCase().includes(q)
-      )
-    }
-    if (area) list = list.filter(t => t.area === area)
-    if (type) list = list.filter(t => (t.types || []).includes(type))
-    setFiltered(list)
-  }
-
   return (
-    <>
+    <div className="bg-white min-h-screen font-sans text-right" dir="rtl">
       <Head>
-        <title>מגע — מטפלים מוסמכים עד אליך הביתה</title>
-        <meta name="description" content="מצא מטפל עיסוי מוסמך ומאושר באזורך. עיסוי שוודי, רקמות עמוקות, הריון ועוד — הכל בלחיצה אחת." />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta property="og:title" content="מגע — מטפלים מוסמכים עד אליך הביתה" />
-        <meta property="og:description" content="מצא מטפל עיסוי מאושר באזורך תוך דקה. עיסוי ביתי מקצועי בכל הארץ." />
-        <meta property="og:image" content="https://yourdomain.co.il/og-image.jpg" />
-        <meta property="og:url" content="https://yourdomain.co.il" />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <link rel="icon" href="/favicon.ico" />
+        <title>מגע — פלטפורמת העיסוי #1 בישראל</title>
+        <meta name="description" content="מצאו מטפלים מוסמכים עד הבית" />
       </Head>
 
       <AccessibilityWidget />
+      <WhatsAppFAB />
 
-      {/* NAV */}
-      <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
-        <div className="max-w-5xl mx-auto px-5 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-emerald-700 rounded-xl flex items-center justify-center text-white font-bold text-sm">מ</div>
-            <span className="font-semibold text-gray-900 text-lg tracking-tight">מגע</span>
-          </Link>
-          <Link href="/join" className="bg-emerald-700 text-white text-sm font-medium px-4 py-2 rounded-full hover:bg-emerald-800 transition-colors">
-            הצטרף כמטפל
-          </Link>
+      {/* Hero Section */}
+      <section className="pt-20 pb-12 px-5 bg-gradient-to-b from-emerald-50 to-white text-center">
+        <p className="text-emerald-700 font-bold mb-3 tracking-wide">פלטפורמת העיסוי #1 בישראל</p>
+        <h1 className="text-5xl md:text-6xl font-black text-gray-900 mb-6 leading-tight">
+          מטפל מוסמך <br/> <span className="text-emerald-700">עד אליך הביתה</span>
+        </h1>
+        <p className="text-gray-600 text-lg max-w-xl mx-auto mb-10 leading-relaxed">
+          בחר אזור, מצא מטפל מאושר, שלח הודעה — הכל בפחות מדקה.
+        </p>
+
+        {/* Stats */}
+        <div className="flex justify-center gap-8 md:gap-16 mb-12">
+          <div><p className="text-2xl font-bold text-gray-900">200+</p><p className="text-gray-500 text-sm">מטפלים</p></div>
+          <div><p className="text-2xl font-bold text-gray-900">4.9</p><p className="text-gray-500 text-sm">דירוג ממוצע</p></div>
+          <div><p className="text-2xl font-bold text-gray-900">כל הארץ</p><p className="text-gray-500 text-sm">אזורים</p></div>
         </div>
-      </nav>
 
-      {/* HERO */}
-      <section className="bg-emerald-700 pt-14 pb-10 px-5">
-        <div className="max-w-2xl mx-auto text-center">
-          <p className="text-emerald-300 text-xs uppercase tracking-widest mb-3 font-medium">פלטפורמת העיסוי #1 בישראל</p>
-          <h1 className="text-white text-4xl font-bold leading-tight mb-3 tracking-tight">
-            מטפל מוסמך<br /><span className="text-emerald-300">עד אליך הביתה</span>
-          </h1>
-          <p className="text-emerald-200 text-base mb-8 leading-relaxed">
-            בחר אזור, מצא מטפל מאושר, שלח הודעה — הכל בפחות מדקה
-          </p>
-          <div className="flex justify-center gap-8 mb-8 text-center">
-            {[['200+','מטפלים'],['4.9','דירוג ממוצע'],['כל הארץ','אזורים']].map(([n,l],i)=>(
-              <div key={i}>
-                <div className="text-white text-2xl font-bold">{n}</div>
-                <div className="text-emerald-300 text-xs mt-0.5">{l}</div>
-              </div>
-            ))}
-          </div>
-          {/* Search */}
-          <div className="bg-white rounded-2xl p-4 shadow-xl text-right">
+        {/* Search & Filters */}
+        <div className="max-w-4xl mx-auto bg-white p-4 rounded-3xl shadow-xl border border-emerald-100 space-y-3 md:space-y-0 md:flex gap-3">
+          <div className="flex-1">
             <SearchBar query={query} setQuery={setQuery} />
-            <div className="flex gap-2 mt-3 flex-wrap">
-              <select
-                value={area} onChange={e => setArea(e.target.value)}
-                className="flex-1 min-w-[130px] border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-700 bg-gray-50 outline-none focus:border-emerald-500"
-              >
-                <option value="">כל האזורים</option>
-                {AREAS.map(a => <option key={a}>{a}</option>)}
-              </select>
-              <select
-                value={type} onChange={e => setType(e.target.value)}
-                className="flex-1 min-w-[130px] border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-700 bg-gray-50 outline-none focus:border-emerald-500"
-              >
-                <option value="">כל הטיפולים</option>
-                {TYPES.map(t => <option key={t}>{t}</option>)}
-              </select>
-            </div>
           </div>
+          <select 
+            onChange={(e) => setArea(e.target.value)}
+            className="w-full md:w-48 border border-gray-100 rounded-2xl px-4 py-3 bg-gray-50 outline-none focus:ring-2 focus:ring-emerald-500 transition-all"
+          >
+            <option value="">כל האזורים</option>
+            <option value="תל אביב והמרכז">תל אביב והמרכז</option>
+            <option value="ירושלים">ירושלים</option>
+            <option value="חיפה והצפון">חיפה והצפון</option>
+            <option value="באר שבע והדרום">באר שבע והדרום</option>
+          </select>
+          <select 
+            onChange={(e) => setType(e.target.value)}
+            className="w-full md:w-48 border border-gray-100 rounded-2xl px-4 py-3 bg-gray-50 outline-none focus:ring-2 focus:ring-emerald-500 transition-all"
+          >
+            <option value="">כל הטיפולים</option>
+            <option value="שוודי">שוודי</option>
+            <option value="רקמות עמוקות">רקמות עמוקות</option>
+            <option value="ספורט">ספורט</option>
+            <option value="שיאצו">שיאצו</option>
+          </select>
         </div>
       </section>
 
-      {/* RESULTS */}
-      <main className="max-w-5xl mx-auto px-5 py-10">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-gray-900 font-semibold text-lg">
-            {filtered.length > 0 ? `${filtered.length} מטפלים` : 'מטפלים מאושרים'}
-          </h2>
-          {(area || type || query) && (
-            <button onClick={() => { setArea(''); setType(''); setQuery('') }}
-              className="text-emerald-600 text-sm hover:underline">
-              נקה סינון
-            </button>
-          )}
-        </div>
-
+      {/* Therapists Grid */}
+      <main className="max-w-6xl mx-auto px-5 py-16">
+        <h2 className="text-3xl font-bold text-gray-900 mb-8">מטפלים מאושרים בקרבתך</h2>
+        
         {loading ? (
-          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            {[1,2,3].map(i => (
-              <div key={i} className="bg-gray-100 animate-pulse rounded-2xl h-64" />
+          <div className="text-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-700 mx-auto"></div>
+            <p className="mt-4 text-gray-500 font-medium">טוען מטפלים...</p>
+          </div>
+        ) : filtered.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filtered.map(t => (
+              <TherapistCard key={t.id} therapist={t} />
             ))}
           </div>
-        ) : filtered.length === 0 ? (
-          <div className="text-center py-20 text-gray-400">
-            <div className="text-5xl mb-4">🔍</div>
-            <p className="text-lg font-medium text-gray-500">לא נמצאו מטפלים</p>
-            <p className="text-sm mt-1">נסה לשנות את הסינון</p>
-          </div>
         ) : (
-          <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map(t => <TherapistCard key={t.id} therapist={t} />)}
+          <div className="text-center py-20 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
+            <div className="text-5xl mb-4">🔍</div>
+            <h3 className="text-xl font-bold text-gray-900">לא נמצאו מטפלים</h3>
+            <p className="text-gray-500 mt-2">נסה לשנות את הסינון או את החיפוש</p>
           </div>
         )}
       </main>
 
-      {/* JOIN BAND */}
-      <section className="bg-emerald-700 py-12 px-5 text-center">
-        <h2 className="text-white text-2xl font-bold mb-2">אתה מטפל מוסמך?</h2>
-        <p className="text-emerald-200 text-sm mb-6 leading-relaxed">קבל לקוחות חדשים באזורך.<br />הרשמה חינמית, אישור תוך 24 שעות.</p>
-        <Link href="/join" className="bg-white text-emerald-700 font-semibold px-7 py-3 rounded-full text-sm hover:bg-emerald-50 transition-colors inline-block">
-          הצטרף עכשיו
-        </Link>
+      {/* CTA Section */}
+      <section className="max-w-5xl mx-auto px-5 mb-20">
+        <div className="bg-emerald-700 rounded-[3rem] p-10 md:p-16 text-center text-white shadow-2xl relative overflow-hidden">
+          <div className="relative z-10">
+            <h2 className="text-3xl md:text-4xl font-black mb-6">אתה מטפל מוסמך?</h2>
+            <p className="text-emerald-50 text-lg mb-10 max-w-2xl mx-auto">
+              הצטרף למאגר המטפלים המוביל בישראל, קבל לקוחות חדשים באזורך ונהל את היומן שלך בקלות. הרשמה חינמית, אישור תוך 24 שעות.
+            </p>
+            <Link href="/join" className="bg-white text-emerald-700 font-black px-10 py-5 rounded-2xl hover:bg-emerald-50 transition-all text-xl shadow-lg inline-block">
+              הצטרף עכשיו
+            </Link>
+          </div>
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32"></div>
+        </div>
       </section>
 
       <Footer />
-      <WhatsAppFAB />
-    </>
+    </div>
   )
 }
