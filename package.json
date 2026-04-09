@@ -1,0 +1,239 @@
+import Head from 'next/head'
+import { useState } from 'react'
+import { supabase } from '../lib/supabase'
+import Link from 'next/link'
+import Footer from '../components/Footer'
+
+const AREAS = ['תל אביב והמרכז','ירושלים','חיפה והצפון','באר שבע והדרום','השרון','גוש דן']
+const TYPES = ['שוודי','רקמות עמוקות','ספורט','הריון','שיאצו','רפלקסולוגיה','לימפה']
+
+export default function Join() {
+  const [form, setForm] = useState({
+    name:'', phone:'', area:'', price:'', experience:'', description:''
+  })
+  const [selectedTypes, setSelectedTypes] = useState([])
+  const [imageFile, setImageFile] = useState(null)
+  const [imagePreview, setImagePreview] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const [errors, setErrors] = useState({})
+
+  function handleInput(e) {
+    setForm({ ...form, [e.target.name]: e.target.value })
+    if (errors[e.target.name]) setErrors({ ...errors, [e.target.name]: '' })
+  }
+
+  function toggleType(t) {
+    setSelectedTypes(prev =>
+      prev.includes(t) ? prev.filter(x => x !== t) : [...prev, t]
+    )
+  }
+
+  function handleImage(e) {
+    const file = e.target.files[0]
+    if (!file) return
+    if (file.size > 5 * 1024 * 1024) { alert('התמונה גדולה מדי — מקסימום 5MB'); return }
+    setImageFile(file)
+    const reader = new FileReader()
+    reader.onload = ev => setImagePreview(ev.target.result)
+    reader.readAsDataURL(file)
+  }
+
+  function validate() {
+    const e = {}
+    if (!form.name.trim()) e.name = 'שם חובה'
+    if (!form.phone.match(/^0[0-9]{9}$/)) e.phone = 'מספר טלפון לא תקין'
+    if (!form.area) e.area = 'בחר אזור'
+    if (!form.price || isNaN(form.price) || +form.price < 50) e.price = 'מחיר לא תקין'
+    if (selectedTypes.length === 0) e.types = 'בחר לפחות סוג טיפול אחד'
+    return e
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    const errs = validate()
+    if (Object.keys(errs).length) { setErrors(errs); return }
+    setLoading(true)
+
+    let imageUrl = null
+    if (imageFile) {
+      const ext = imageFile.name.split('.').pop()
+      const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('therapist-images')
+        .upload(filename, imageFile, { contentType: imageFile.type, upsert: false })
+      if (!uploadError) {
+        const { data: urlData } = supabase.storage.from('therapist-images').getPublicUrl(filename)
+        imageUrl = urlData.publicUrl
+      }
+    }
+
+    const phone = form.phone.replace(/[^0-9]/g, '')
+    const waPhone = phone.startsWith('0') ? '972' + phone.slice(1) : phone
+    const waMessage = encodeURIComponent(`היי ${form.name}, הגעתי דרך אתר מגע ואשמח לקבוע עיסוי 🙏`)
+    const waLink = `https://wa.me/${waPhone}?text=${waMessage}`
+
+    const { error } = await supabase.from('therapists').insert([{
+      name: form.name.trim(),
+      phone: form.phone,
+      area: form.area,
+      types: selectedTypes,
+      price: parseInt(form.price),
+      experience: form.experience ? parseInt(form.experience) : null,
+      description: form.description.trim(),
+      image_url: imageUrl,
+      wa_link: waLink,
+      approved: false,
+      featured: false,
+      rating: null,
+      reviews_count: 0,
+    }])
+
+    setLoading(false)
+    if (error) { alert('שגיאה בשליחה, נסה שוב'); return }
+    setSuccess(true)
+  }
+
+  if (success) return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-5">
+      <div className="bg-white rounded-3xl p-10 max-w-md w-full text-center shadow-sm border border-gray-100">
+        <div className="text-6xl mb-5">✅</div>
+        <h2 className="text-2xl font-bold text-gray-900 mb-3">הבקשה נשלחה!</h2>
+        <p className="text-gray-500 leading-relaxed mb-7">
+          תודה שנרשמת למגע.<br />
+          נבדוק את הפרטים ונחזור אליך תוך 24 שעות עם אישור.
+        </p>
+        <Link href="/" className="bg-emerald-700 text-white font-semibold px-7 py-3 rounded-full text-sm hover:bg-emerald-800 transition-colors inline-block">
+          חזור לעמוד הבית
+        </Link>
+      </div>
+    </div>
+  )
+
+  return (
+    <>
+      <Head>
+        <title>הצטרף כמטפל — מגע</title>
+        <meta name="robots" content="noindex" />
+      </Head>
+
+      <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+        <div className="max-w-5xl mx-auto px-5 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-emerald-700 rounded-xl flex items-center justify-center text-white font-bold text-sm">מ</div>
+            <span className="font-semibold text-gray-900 text-lg">מגע</span>
+          </Link>
+        </div>
+      </nav>
+
+      <main className="max-w-xl mx-auto px-5 py-12">
+        <div className="text-center mb-10">
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-2">הצטרף כמטפל</h1>
+          <p className="text-gray-400 text-sm">מלא את הפרטים — נאשר ונפרסם אותך תוך 24 שעות</p>
+        </div>
+
+        <form onSubmit={handleSubmit} noValidate className="bg-white rounded-3xl p-7 shadow-sm border border-gray-100 space-y-5">
+
+          {/* Image upload */}
+          <div className="flex flex-col items-center gap-3">
+            <div className="w-24 h-24 rounded-full bg-gray-100 overflow-hidden border-2 border-dashed border-gray-200 flex items-center justify-center cursor-pointer hover:border-emerald-400 transition-colors"
+              onClick={() => document.getElementById('img-input').click()}>
+              {imagePreview
+                ? <img src={imagePreview} alt="preview" className="w-full h-full object-cover" />
+                : <span className="text-3xl">📷</span>
+              }
+            </div>
+            <input id="img-input" type="file" accept="image/*" className="hidden" onChange={handleImage} />
+            <button type="button" onClick={() => document.getElementById('img-input').click()}
+              className="text-emerald-600 text-sm font-medium hover:underline">
+              {imagePreview ? 'החלף תמונה' : 'העלה תמונת פרופיל'}
+            </button>
+            <p className="text-gray-400 text-xs">מקסימום 5MB · JPG / PNG / WEBP</p>
+          </div>
+
+          {/* Name */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">שם מלא *</label>
+            <input name="name" value={form.name} onChange={handleInput} placeholder="שם פרטי ומשפחה"
+              className={`w-full border rounded-xl px-4 py-3 text-sm outline-none transition-colors ${errors.name ? 'border-red-400' : 'border-gray-200 focus:border-emerald-500'}`} />
+            {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+          </div>
+
+          {/* Phone */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">טלפון וואטסאפ *</label>
+            <input name="phone" value={form.phone} onChange={handleInput} placeholder="05X-XXXXXXX" type="tel" dir="ltr"
+              className={`w-full border rounded-xl px-4 py-3 text-sm outline-none transition-colors ${errors.phone ? 'border-red-400' : 'border-gray-200 focus:border-emerald-500'}`} />
+            {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+            <p className="text-gray-400 text-xs mt-1">לקוחות יפנו אליך ישירות לוואטסאפ</p>
+          </div>
+
+          {/* Area + Price */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">אזור פעילות *</label>
+              <select name="area" value={form.area} onChange={handleInput}
+                className={`w-full border rounded-xl px-4 py-3 text-sm outline-none bg-white ${errors.area ? 'border-red-400' : 'border-gray-200 focus:border-emerald-500'}`}>
+                <option value="">בחר אזור</option>
+                {AREAS.map(a => <option key={a}>{a}</option>)}
+              </select>
+              {errors.area && <p className="text-red-500 text-xs mt-1">{errors.area}</p>}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">מחיר ל-60 דקות (₪) *</label>
+              <input name="price" value={form.price} onChange={handleInput} placeholder="250" type="number" min="50" dir="ltr"
+                className={`w-full border rounded-xl px-4 py-3 text-sm outline-none ${errors.price ? 'border-red-400' : 'border-gray-200 focus:border-emerald-500'}`} />
+              {errors.price && <p className="text-red-500 text-xs mt-1">{errors.price}</p>}
+            </div>
+          </div>
+
+          {/* Types */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">סוגי טיפולים *</label>
+            <div className="flex flex-wrap gap-2">
+              {TYPES.map(t => (
+                <button key={t} type="button" onClick={() => toggleType(t)}
+                  className={`px-3 py-1.5 rounded-full text-sm border transition-all ${
+                    selectedTypes.includes(t)
+                      ? 'bg-emerald-700 text-white border-emerald-700'
+                      : 'bg-gray-50 text-gray-600 border-gray-200 hover:border-emerald-400'
+                  }`}>
+                  {t}
+                </button>
+              ))}
+            </div>
+            {errors.types && <p className="text-red-500 text-xs mt-1">{errors.types}</p>}
+          </div>
+
+          {/* Experience */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">שנות ניסיון</label>
+            <input name="experience" value={form.experience} onChange={handleInput} placeholder="5" type="number" min="0" dir="ltr"
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-emerald-500" />
+          </div>
+
+          {/* Description */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">תיאור קצר</label>
+            <textarea name="description" value={form.description} onChange={handleInput}
+              placeholder="ספר על עצמך — ניסיון, גישה, מה מיוחד בטיפולים שלך..."
+              rows={4}
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-emerald-500 resize-none" />
+          </div>
+
+          {/* Honeypot anti-bot */}
+          <input name="website" tabIndex="-1" autoComplete="off" className="hidden" />
+
+          <button type="submit" disabled={loading}
+            className="w-full bg-emerald-700 text-white font-semibold py-4 rounded-2xl text-base hover:bg-emerald-800 transition-colors disabled:opacity-60 disabled:cursor-not-allowed">
+            {loading ? 'שולח...' : 'שלח בקשת הרשמה'}
+          </button>
+          <p className="text-center text-gray-400 text-xs">
+            בלחיצה על הכפתור אתה מסכים ל<Link href="/privacy" className="underline hover:text-gray-600">מדיניות הפרטיות</Link> ו<Link href="/terms" className="underline hover:text-gray-600">תנאי השימוש</Link>
+          </p>
+        </form>
+      </main>
+      <Footer />
+    </>
+  )
+}
