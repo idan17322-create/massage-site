@@ -1,72 +1,113 @@
-import { useState, useEffect } from 'react'
-import { supabase } from '../../lib/supabase'
 import Head from 'next/head'
+import { useState, useEffect } from 'react'
+import { supabase } from '../lib/supabase'
+import SearchBar from '../components/SearchBar'
+import TherapistCard from '../components/TherapistCard'
+import WhatsAppFAB from '../components/WhatsAppFAB'
+import AccessibilityWidget from '../components/AccessibilityWidget'
+import Footer from '../components/Footer'
 
-export default function Admin() {
-  const [password, setPassword] = useState('')
-  const [isAuthed, setIsAuthed] = useState(false)
+export default function Home() {
   const [therapists, setTherapists] = useState([])
-
-  const ADMIN_PASS = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'maga2024'
+  const [filtered, setFiltered] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [area, setArea] = useState('')
+  const [query, setQuery] = useState('')
 
   useEffect(() => {
-    if (isAuthed) fetchAll()
-  }, [isAuthed])
+    fetchTherapists()
+  }, [])
 
-  async function fetchAll() {
-    const { data } = await supabase.from('therapists').select('*').order('created_at', { ascending: false })
-    setTherapists(data || [])
-  }
+  useEffect(() => {
+    let result = therapists
+    if (area) result = result.filter(t => t.area === area)
+    if (query) {
+      result = result.filter(t => 
+        t.name.toLowerCase().includes(query.toLowerCase()) || 
+        t.description?.toLowerCase().includes(query.toLowerCase())
+      )
+    }
+    setFiltered(result)
+  }, [area, query, therapists])
 
-  async function toggleApprove(id, status) {
-    await supabase.from('therapists').update({ approved: status }).eq('id', id)
-    fetchAll()
-  }
-
-  if (!isAuthed) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100" dir="rtl">
-        <div className="bg-white p-8 rounded-2xl shadow-xl w-96 text-center">
-          <h1 className="text-2xl font-bold mb-6">כניסת מנהל</h1>
-          <input 
-            type="password" 
-            placeholder="סיסמה" 
-            className="w-full border p-3 rounded-xl mb-4 text-center"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button 
-            onClick={() => password === ADMIN_PASS ? setIsAuthed(true) : alert('סיסמה שגויה')}
-            className="w-full bg-black text-white p-3 rounded-xl font-bold"
-          >
-            כניסה
-          </button>
-        </div>
-      </div>
-    )
+  async function fetchTherapists() {
+    setLoading(true)
+    const { data, error } = await supabase
+      .from('therapists')
+      .select('*')
+      .eq('approved', true)
+    if (!error && data) {
+      setTherapists(data)
+      setFiltered(data)
+    }
+    setLoading(false)
   }
 
   return (
-    <div className="p-8 max-w-5xl mx-auto text-right" dir="rtl">
-      <Head><title>ניהול מטפלים | מגע</title></Head>
-      <h1 className="text-3xl font-bold mb-8">ניהול בקשות הצטרפות</h1>
-      <div className="space-y-4">
-        {therapists.map(t => (
-          <div key={t.id} className="bg-white p-6 rounded-2xl shadow-sm border flex justify-between items-center">
-            <div>
-              <h3 className="text-xl font-bold">{t.name}</h3>
-              <p className="text-gray-500">{t.area} | {t.phone}</p>
+    <div className="bg-[#F5F5F7] min-h-screen font-sans text-right" dir="rtl">
+      <Head>
+        <title>מגע | מטפלים מוסמכים</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
+
+      <AccessibilityWidget />
+      <WhatsAppFAB />
+
+      {/* Hero Section - Apple Style */}
+      <section className="pt-32 pb-20 px-6 text-center">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-6xl md:text-8xl font-bold text-black tracking-tight mb-8">
+            מגע. <span className="text-gray-400">פשוט מבריק.</span>
+          </h1>
+          <p className="text-2xl text-gray-500 font-medium max-w-2xl mx-auto mb-12">
+            המטפלים הכי טובים בפתח תקווה ובכל הארץ, <br className="hidden md:block" />
+            במרחק לחיצה אחת.
+          </p>
+
+          {/* Search Box */}
+          <div className="max-w-2xl mx-auto bg-white/70 backdrop-blur-xl p-2 rounded-3xl shadow-2xl border border-white/20 flex flex-col md:flex-row gap-2">
+            <div className="flex-1">
+              <SearchBar query={query} setQuery={setQuery} />
             </div>
-            <div className="flex gap-2">
-              <button 
-                onClick={() => toggleApprove(t.id, !t.approved)}
-                className={`px-6 py-2 rounded-full font-bold ${t.approved ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-emerald-600'}`}
-              >
-                {t.approved ? 'בטל אישור' : 'אשר מטפל'}
-              </button>
-            </div>
+            <select 
+              onChange={(e) => setArea(e.target.value)}
+              className="md:w-56 bg-transparent border-none px-6 py-4 outline-none text-gray-600 font-semibold text-lg cursor-pointer"
+            >
+              <option value="">כל האזורים</option>
+              <option value="תל אביב והמרכז">תל אביב והמרכז</option>
+              <option value="ירושלים">ירושלים</option>
+              <option value="חיפה והצפון">חיפה והצפון</option>
+              <option value="באר שבע והדרום">באר שבע והדרום</option>
+            </select>
           </div>
-        ))}
-      </div>
+        </div>
+      </section>
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-6 pb-32">
+        <div className="flex justify-between items-end mb-12">
+          <h2 className="text-3xl font-bold text-black">מטפלים מוסמכים</h2>
+          <span className="text-gray-400 font-medium">{filtered.length} מטפלים נמצאו</span>
+        </div>
+        
+        {loading ? (
+          <div className="flex justify-center items-center py-32">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black"></div>
+          </div>
+        ) : filtered.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {filtered.map(t => (
+              <TherapistCard key={t.id} therapist={t} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-32 bg-white rounded-[2rem] border border-gray-100">
+            <p className="text-2xl text-gray-300 font-medium">לא מצאנו מטפלים תחת הסינון הזה...</p>
+          </div>
+        )}
+      </main>
+
+      <Footer />
     </div>
   )
 }
