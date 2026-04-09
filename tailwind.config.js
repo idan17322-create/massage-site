@@ -1,3 +1,7 @@
-NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT_ID.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_ANON_KEY_HERE
-NEXT_PUBLIC_ADMIN_PASSWORD=maga2024
+module.exports = {
+  content: ['./pages/**/*.{js,jsx}', './components/**/*.{js,jsx}'],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
