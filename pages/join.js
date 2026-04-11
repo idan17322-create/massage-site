@@ -8,17 +8,6 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 )
 
-const CITIES = [
-  'תל אביב','ירושלים','חיפה','באר שבע','ראשון לציון','פתח תקווה',
-  'אשדוד','נתניה','בני ברק','רמת גן','גבעתיים','חולון','בת ים',
-  'הרצליה','כפר סבא','רעננה','הוד השרון','רמת השרון','נס ציונה',
-  'ראש העין','לוד','רמלה','מודיעין','אשקלון','רחובות',
-  'קריית גת','דימונה','אילת','טבריה','נצרת','עפולה','כרמיאל',
-  'נהריה','עכו','צפת','קריות','זכרון יעקב','פרדס חנה','חדרה',
-  'מגדל העמק','בית שאן','אריאל','מעלה אדומים','ביתר עילית',
-  'בית שמש','קרית ארבע','קצרין','טירת כרמל'
-]
-
 const TYPE_CATEGORIES = [
   { label: 'עיסויים קלאסיים', types: ['שוודי','רקמות עמוקות','ספורט','תאילנדי','הריון'] },
   { label: 'טיפולים מיוחדים', types: ['שיאצו','רפלקסולוגיה','לימפה','אבנים חמות','עיסוי פנים','ארומתרפיה'] },
@@ -62,7 +51,7 @@ export default function Join() {
     const e = {}
     if (!form.name.trim()) e.name = 'שם חובה'
     if (!form.phone.match(/^0[0-9]{9}$/)) e.phone = 'מספר טלפון לא תקין (10 ספרות)'
-    if (!form.city) e.city = 'בחר עיר'
+    if (!form.city.trim()) e.city = 'נא להזין עיר פעילות'
     if (types.length === 0) e.types = 'בחר לפחות סוג טיפול אחד'
     if (!agreed) e.agreed = 'יש לאשר את כל התנאים כדי להמשיך'
     return e
@@ -111,8 +100,8 @@ export default function Join() {
     const { error } = await supabase.from('therapists').insert([{
       name: form.name.trim(),
       phone: form.phone,
-      city: form.city,
-      area: form.city,
+      city: form.city.trim(),
+      area: form.city.trim(),
       types,
       price: 0, // ברירת מחדל עד שנסגר מול עידן
       experience: form.experience ? parseInt(form.experience) : null,
@@ -237,13 +226,10 @@ export default function Join() {
             <p style={{ fontSize: 11, color: '#bbb', marginTop: 4 }}>לקוחות יפנו אליך ישירות לוואטסאפ</p>
           </div>
 
-          {/* עיר */}
+          {/* עיר (שדה טקסט פתוח במקום רשימה) */}
           <div>
-            <label htmlFor="f-city" style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#444', marginBottom: 6 }}>עיר פעילות *</label>
-            <select id="f-city" name="city" value={form.city} onChange={handleInput} style={{ ...inp(errors.city), cursor: 'pointer' }}>
-              <option value="">בחר עיר</option>
-              {CITIES.sort().map(c => <option key={c}>{c}</option>)}
-            </select>
+            <label htmlFor="f-city" style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#444', marginBottom: 6 }}>עיר פעילות מרכזית *</label>
+            <input id="f-city" name="city" value={form.city} onChange={handleInput} placeholder="לדוגמה: תל אביב, אילת, קיבוץ דפנה..." style={inp(errors.city)} />
             {errors.city && <p role="alert" style={{ color: '#f87171', fontSize: 12, marginTop: 4 }}>{errors.city}</p>}
           </div>
 

@@ -30,6 +30,82 @@ const WA_ICON = (
   </svg>
 )
 
+// --- תוכן המאמרים שלנו ---
+const ARTICLES = [
+  {
+    id: 1,
+    category: 'מדריך',
+    title: 'עיסוי שוודי או רקמות עמוקות?',
+    shortDesc: 'מה ההבדל בין שני הטיפולים הנפוצים ביותר ואיך תדעו מה הגוף שלכם צריך עכשיו.',
+    image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80',
+    content: (
+      <>
+        <p>הגעתם למצב שבו הגוף פשוט דורש עיסוי, אבל כשאתם מסתכלים על רשימת הטיפולים אתם מתלבטים: שוודי קלאסי או רקמות עמוקות? זו אחת ההתלבטויות הנפוצות ביותר, וההבדל ביניהם משמעותי מאוד.</p>
+        
+        <h4 style={{ fontSize: 18, color: '#0F6E56', marginTop: 24, marginBottom: 12 }}>עיסוי שוודי: החופשה של הגוף</h4>
+        <p>העיסוי השוודי מתמקד בעיקר בשכבות העליונות של השריר. מטרתו היא להזרים דם למרכז הלב, להרפות שרירים מתוחים ולשחרר אנדורפינים. התנועות ארוכות, רכות ומלטפות, לרוב בשילוב שמנים. <br/><br/><strong>למי זה מתאים?</strong> למי שמרגיש "עייפות חומר", סטרס נפשי, עומס בעבודה, או פשוט רוצה שעת פינוק שבה הוא לא חושב על כלום. זהו עיסוי שמתאים כמעט לכולם, במיוחד למי שעושה עיסוי בפעם הראשונה.</p>
+
+        <h4 style={{ fontSize: 18, color: '#0F6E56', marginTop: 24, marginBottom: 12 }}>רקמות עמוקות: שחרור ממוקד ותכליתי</h4>
+        <p>בניגוד לשוודי, עיסוי רקמות עמוקות "נכנס פנימה". המטפל ישתמש במרפקים, באמות ובאצבעות כדי להפעיל לחץ ממוקד על ה"קשרים" (Trigger points) שבשריר וברקמת החיבור (פאשיה) שעוטפת אותו. הלחץ חזק יותר, ולפעמים עשוי להיות מעט לא נעים באותו רגע, אך השחרור שמגיע לאחר מכן הוא עמוק ומשמעותי.<br/><br/><strong>למי זה מתאים?</strong> למי שסובל מכאבים כרוניים (כמו כאבי גב תחתון או צוואר תפוס מהמחשב), לספורטאים, או לאנשים ש"רגילים" לעיסויים ומרגישים שעיסוי עדין פשוט לא מספיק להם.</p>
+
+        <h4 style={{ fontSize: 18, color: '#0F6E56', marginTop: 24, marginBottom: 12 }}>השורה התחתונה</h4>
+        <p>אם בא לכם לעצום עיניים ולהירדם – בחרו ב<strong>שוודי</strong>.<br/>אם יש לכם שריר ספציפי שכואב ומציק, ואתם מוכנים לעבודת עומק כדי לשחרר אותו – לכו על <strong>רקמות עמוקות</strong>.</p>
+      </>
+    )
+  },
+  {
+    id: 2,
+    category: 'טיפים',
+    title: '5 הכנות לעיסוי עד הבית',
+    shortDesc: 'איך להכין את החדר, מה ללבוש, וכל מה שצריך לדעת לפני שהמטפל דופק בדלת.',
+    image: 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=800&q=80',
+    content: (
+      <>
+        <p>הזמנתם עיסוי עד הבית? איזה כיף! היתרון הגדול ביותר הוא שאין צורך לנהוג הביתה, לחפש חניה או להיתקע בפקקים בדיוק אחרי שנרגעתם. כדי שהחוויה תהיה באמת ברמת ספא פרימיום, הנה 5 דברים שכדאי להכין מראש:</p>
+
+        <h4 style={{ fontSize: 16, color: '#111', marginTop: 24, marginBottom: 8 }}>1. הכינו מרחב שקט (ונקי)</h4>
+        <p>המטפל מביא איתו מיטת טיפולים, שמצריכה קצת מקום (בערך 2x1 מטר). פנו מקום בסלון או בחדר השינה כך שלמטפל יהיה נוח להסתובב סביב המיטה. מומלץ גם לעמעם את האורות, או אפילו להכין נר ריחני.</p>
+
+        <h4 style={{ fontSize: 16, color: '#111', marginTop: 20, marginBottom: 8 }}>2. מקלחת חמה לפני</h4>
+        <p>זה לא רק עניין של נימוס – מקלחת חמה מרפה את השרירים ופותחת את הנקבוביות, מה שעוזר לשמנים להיספג טוב יותר בעור ומכין את הגוף לקבל את העיסוי בצורה אפקטיבית יותר.</p>
+
+        <h4 style={{ fontSize: 16, color: '#111', marginTop: 20, marginBottom: 8 }}>3. אל תאכלו ארוחה כבדה</h4>
+        <p>כדאי להימנע מארוחה דשנה לפחות שעה-שעתיים לפני הטיפול. עיסוי כשהבטן מלאה עלול לגרום לאי-נוחות, במיוחד כששוכבים על הבטן.</p>
+
+        <h4 style={{ fontSize: 16, color: '#111', marginTop: 20, marginBottom: 8 }}>4. טמפרטורת החדר</h4>
+        <p>במהלך עיסוי טמפרטורת הגוף נוטה לצנוח מעט בגלל ההרפיה הכללית. ודאו שהחדר מחומם ונעים (או ממוזג במידה הנכונה בקיץ), כך שלא יהיה לכם קר מדי כשתשכבו על המיטה.</p>
+
+        <h4 style={{ fontSize: 16, color: '#111', marginTop: 20, marginBottom: 8 }}>5. תתנתקו</h4>
+        <p>העבירו את הטלפון למצב שקט, סגרו את הטלוויזיה (המטפל לרוב יביא מוזיקת רקע או שתוכלו לשים בעצמכם), ותנו לעצמכם רשות להיות שעה שלמה מנותקים מהעולם.</p>
+      </>
+    )
+  },
+  {
+    id: 3,
+    category: 'בריאות',
+    title: 'כוסות רוח - טרנד או רפואה?',
+    shortDesc: 'למה ספורטאים מובילים משתמשים בזה, ואיך זה עוזר לשחרר שרירים תפוסים במיוחד.',
+    image: 'https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=800&q=80',
+    content: (
+      <>
+        <p>בשנים האחרונות אנחנו רואים יותר ויותר ספורטאים אולימפיים ומפורסמים מסתובבים עם עיגולים אדומים מוזרים על הגב והכתפיים. לא, הם לא הותקפו על ידי תמנון – זהו טיפול בכוסות רוח (Cupping Therapy). אבל מה זה בדיוק, והאם זה באמת עובד?</p>
+
+        <h4 style={{ fontSize: 18, color: '#0F6E56', marginTop: 24, marginBottom: 12 }}>איך זה עובד?</h4>
+        <p>טיפול בכוסות רוח הוא טכניקה עתיקה מתוך הרפואה הסינית. המטפל מניח כוסות (לרוב מזכוכית או סיליקון) על אזורים אסטרטגיים בגוף, ויוצר בהן ואקום. הוואקום מושך את העור ורקמת השריר כלפי מעלה לתוך הכוס.</p>
+
+        <p>בעוד שעיסוי רגיל מפעיל לחץ <strong>פנימה</strong> כלפי השריר, כוסות הרוח מושכות את הרקמות <strong>החוצה</strong>. הפעולה הזו יוצרת זרימת דם מוגברת לאזור, מה שמעודד ריפוי טבעי ומאיץ פינוי של חומצת חלב ורעלים שנאגרו בשריר.</p>
+
+        <h4 style={{ fontSize: 18, color: '#0F6E56', marginTop: 24, marginBottom: 12 }}>האם זה כואב?</h4>
+        <p>רוב המטופלים מדווחים כי הטיפול אינו כואב כלל. התחושה היא של מתיחה עמוקה וחזקה, שבדרך כלל הופכת למרגיעה ומשחררת לאחר דקות ספורות. הסימנים האדומים או הכחולים (המוכרים כ"עיגולים") אינם שטפי דם כואבים, אלא סימן לדם שעלה לפני השטח – הם אינם כואבים למגע ונעלמים מעצמם תוך מספר ימים עד שבוע.</p>
+
+        <h4 style={{ fontSize: 18, color: '#0F6E56', marginTop: 24, marginBottom: 12 }}>למי זה מומלץ?</h4>
+        <p>כוסות רוח מעולות למי שסובל משרירים תפוסים מאוד שעיסוי רגיל מתקשה לשחרר, לספורטאים בתהליך התאוששות מאימונים אינטנסיביים, ולאנשים הסובלים מכאבי גב כרוניים, דלקות, או נוקשות בצוואר. זהו שילוב מצוין (שלרוב המטפלים מציעים) כהשלמה לעיסוי ספורט או רקמות עמוקות.</p>
+      </>
+    )
+  }
+];
+
+
 export default function Home() {
   const [list, setList]           = useState([])
   const [show, setShow]           = useState([])
@@ -42,6 +118,9 @@ export default function Home() {
   const [fontSize, setFontSize]   = useState(100)
   const [contrast, setContrast]   = useState(false)
   const [a11yOpen, setA11yOpen]   = useState(false)
+  
+  // State למאמר הקופץ
+  const [activeArticle, setActiveArticle] = useState(null)
 
   useEffect(() => {
     load()
@@ -51,6 +130,15 @@ export default function Home() {
   }, [])
 
   useEffect(() => { filter() }, [list, q, area, type, quizTypes])
+
+  // מונע גלילה כשחלון מאמר פתוח
+  useEffect(() => {
+    if (activeArticle) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  }, [activeArticle]);
 
   async function load() {
     const { data } = await supabase
@@ -108,7 +196,6 @@ export default function Home() {
     return `https://wa.me/${intl}?text=${encodeURIComponent('היי '+t.name+', הגעתי דרך אתר מגע ואשמח לקבוע עיסוי 🙏')}`
   }
 
-  // פונקציה לפתיחת המחשבון
   function openQuiz() {
     window.dispatchEvent(new Event('open-quiz-modal'))
   }
@@ -130,10 +217,13 @@ export default function Home() {
           body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif; background:#f9f9f7; direction:rtl; }
           @keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
           @keyframes shimmer { 0%,100%{opacity:.5} 50%{opacity:.25} }
+          @keyframes modalIn { from{opacity:0;transform:scale(0.95)} to{opacity:1;transform:scale(1)} }
           .fade-up { animation:fadeUp 0.55s ease both; }
+          .modal-anim { animation:modalIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both; }
           .card-hover { transition:transform 0.22s ease,box-shadow 0.22s ease; }
           .card-hover:hover { transform:translateY(-4px); box-shadow:0 16px 48px rgba(0,0,0,0.11); }
-          .article-card:hover { transform:translateY(-4px); box-shadow:0 12px 30px rgba(0,0,0,0.08); }
+          .article-card { transition:transform 0.2s ease, box-shadow 0.2s ease; height: 100%; display: flex; flex-direction: column; cursor: pointer; border: 1px solid #efefef; background: #fafafa; border-radius: 20px; overflow: hidden; }
+          .article-card:hover { transform:translateY(-4px); box-shadow:0 12px 30px rgba(0,0,0,0.08); border-color: #1D9E75; }
           .wa-btn:hover { background:#0F6E56 !important; }
           .wa-btn { transition:background 0.15s; }
           input:focus, select:focus { border-color:#1D9E75 !important; box-shadow:0 0 0 3px rgba(29,158,117,0.12) !important; outline:none !important; }
@@ -148,6 +238,40 @@ export default function Home() {
           }
         `}</style>
       </Head>
+
+      {/* --- Article Modal --- */}
+      {activeArticle && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px 16px' }} onClick={(e) => e.target === e.currentTarget && setActiveArticle(null)}>
+          <div className="modal-anim" style={{ background: '#fff', borderRadius: 24, width: '100%', maxWidth: 700, maxHeight: '90vh', overflowY: 'auto', position: 'relative', boxShadow: '0 24px 60px rgba(0,0,0,0.3)' }}>
+            
+            <button onClick={() => setActiveArticle(null)} style={{ position: 'absolute', top: 16, right: 16, width: 36, height: 36, borderRadius: '50%', background: 'rgba(255,255,255,0.9)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, color: '#333', zIndex: 10, boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}>✕</button>
+            
+            <div style={{ width: '100%', height: 260, backgroundImage: `url(${activeArticle.image})`, backgroundSize: 'cover', backgroundPosition: 'center', borderTopLeftRadius: 24, borderTopRightRadius: 24, position: 'relative' }}>
+              <div style={{ position: 'absolute', bottom: 20, right: 24, background: '#E1F5EE', color: '#0F6E56', padding: '6px 14px', borderRadius: 16, fontSize: 13, fontWeight: 800 }}>
+                {activeArticle.category}
+              </div>
+            </div>
+            
+            <div style={{ padding: '32px 32px 40px', color: '#333', lineHeight: 1.8, fontSize: 16 }}>
+              <h2 style={{ fontSize: 28, fontWeight: 800, color: '#111', marginBottom: 24, letterSpacing: '-0.5px', lineHeight: 1.3 }}>{activeArticle.title}</h2>
+              <div style={{ color: '#444' }}>
+                {activeArticle.content}
+              </div>
+              
+              <div style={{ marginTop: 40, textAlign: 'center', borderTop: '1px solid #eee', paddingTop: 30 }}>
+                <p style={{ fontWeight: 700, fontSize: 18, marginBottom: 16, color: '#111' }}>עשה לכם חשק למסאז'?</p>
+                <button onClick={() => {
+                  setActiveArticle(null);
+                  document.getElementById('main-content').scrollIntoView({ behavior: 'smooth' });
+                }} style={{ background: '#0F6E56', color: '#fff', border: 'none', borderRadius: 20, padding: '14px 32px', fontSize: 16, fontWeight: 800, cursor: 'pointer', transition: 'background 0.2s' }}>
+                  מצאו מטפל עכשיו ←
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      )}
 
       {/* נגישות */}
       <div style={{position:'fixed',top:72,left:16,zIndex:300}}>
@@ -209,12 +333,12 @@ export default function Home() {
           <h1 className="hero-title" style={{color:'#fff',fontSize:48,fontWeight:800,lineHeight:1.1,marginBottom:12,letterSpacing:'-0.8px',textShadow:'0 2px 20px rgba(0,0,0,0.3)'}}>
             מטפל מוסמך<br /><span style={{color:'#6EE7B7'}}>עד אליך הביתה</span>
           </h1>
-          <p style={{color:'rgba(255,255,255,0.8)',fontSize:17,marginBottom:24,lineHeight:1.7}}>
-            בחר עיר, מצא מטפל מאושר, שלח הודעה — הכל בפחות מדקה
+          <p style={{color:'rgba(255,255,255,0.8)',fontSize:18,marginBottom:24,lineHeight:1.7}}>
+            חווית הטיפול המושלמת, בהתאמה אישית.<br />המטפלים המובילים בישראל, עכשיו בהישג ידכם.
           </p>
 
           <div className="stats-row" style={{display:'flex',justifyContent:'center',gap:32,marginBottom:28}}>
-            {[['200+','מטפלים'],['4.9★','דירוג'],['50+ ערים','כיסוי']].map(([n,l],i)=>(
+            {[['70+','מטפלים מוסמכים'],['4.9★','דירוג לקוחות'],['פריסה','ארצית']].map(([n,l],i)=>(
               <div key={l} style={{padding:'12px 20px',textAlign:'center',background:'rgba(255,255,255,0.1)',backdropFilter:'blur(12px)',borderRadius:14,border:'1px solid rgba(255,255,255,0.15)'}}>
                 <div style={{color:'#fff',fontSize:18,fontWeight:800}}>{n}</div>
                 <div style={{color:'rgba(255,255,255,0.6)',fontSize:10,marginTop:1}}>{l}</div>
@@ -374,7 +498,7 @@ export default function Home() {
         </div>
       </main>
 
-      {/* ARTICLES SECTION - תבניות למאמרים */}
+      {/* ARTICLES SECTION - תבניות למאמרים שפותחות Modal */}
       <section style={{background:'#fff',padding:'60px 16px',borderTop:'1px solid #efefef'}}>
         <div style={{maxWidth:1140,margin:'0 auto'}}>
           <div style={{textAlign:'center',marginBottom:40}}>
@@ -383,38 +507,21 @@ export default function Home() {
           </div>
           
           <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))',gap:24}}>
-            {/* מאמר 1 */}
-            <div className="article-card" style={{background:'#fafafa',borderRadius:20,overflow:'hidden',border:'1px solid #efefef',cursor:'pointer',transition:'all 0.2s'}}>
-              <div style={{height:160,background:'#e0e0e0',backgroundImage:'url(https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&q=80)',backgroundSize:'cover',backgroundPosition:'center'}}></div>
-              <div style={{padding:20}}>
-                <span style={{color:'#0F6E56',fontSize:11,fontWeight:800,background:'#E1F5EE',padding:'4px 10px',borderRadius:12}}>מדריך</span>
-                <h3 style={{fontSize:17,fontWeight:700,color:'#111',marginTop:10,marginBottom:8}}>עיסוי שוודי או רקמות עמוקות?</h3>
-                <p style={{fontSize:13,color:'#666',lineHeight:1.6,marginBottom:16}}>מה ההבדל בין שני הטיפולים הנפוצים ביותר ואיך תדעו מה הגוף שלכם צריך עכשיו.</p>
-                <div style={{fontSize:13,color:'#0F6E56',fontWeight:700}}>קרא עוד ←</div>
+            {ARTICLES.map((article) => (
+              <div 
+                key={article.id} 
+                className="article-card" 
+                onClick={() => setActiveArticle(article)}
+              >
+                <div style={{height:160,background:'#e0e0e0',backgroundImage:`url(${article.image})`,backgroundSize:'cover',backgroundPosition:'center'}}></div>
+                <div style={{padding:20, flex: 1}}>
+                  <span style={{color:'#0F6E56',fontSize:11,fontWeight:800,background:'#E1F5EE',padding:'4px 10px',borderRadius:12}}>{article.category}</span>
+                  <h3 style={{fontSize:17,fontWeight:700,color:'#111',marginTop:10,marginBottom:8}}>{article.title}</h3>
+                  <p style={{fontSize:13,color:'#666',lineHeight:1.6,marginBottom:16}}>{article.shortDesc}</p>
+                  <div style={{fontSize:13,color:'#0F6E56',fontWeight:700}}>קרא עוד ←</div>
+                </div>
               </div>
-            </div>
-
-            {/* מאמר 2 */}
-            <div className="article-card" style={{background:'#fafafa',borderRadius:20,overflow:'hidden',border:'1px solid #efefef',cursor:'pointer',transition:'all 0.2s'}}>
-              <div style={{height:160,background:'#e0e0e0',backgroundImage:'url(https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=600&q=80)',backgroundSize:'cover',backgroundPosition:'center'}}></div>
-              <div style={{padding:20}}>
-                <span style={{color:'#0F6E56',fontSize:11,fontWeight:800,background:'#E1F5EE',padding:'4px 10px',borderRadius:12}}>טיפים</span>
-                <h3 style={{fontSize:17,fontWeight:700,color:'#111',marginTop:10,marginBottom:8}}>5 הכנות לעיסוי עד הבית</h3>
-                <p style={{fontSize:13,color:'#666',lineHeight:1.6,marginBottom:16}}>איך להכין את החדר, מה ללבוש, וכל מה שצריך לדעת לפני שהמטפל דופק בדלת.</p>
-                <div style={{fontSize:13,color:'#0F6E56',fontWeight:700}}>קרא עוד ←</div>
-              </div>
-            </div>
-
-            {/* מאמר 3 */}
-            <div className="article-card" style={{background:'#fafafa',borderRadius:20,overflow:'hidden',border:'1px solid #efefef',cursor:'pointer',transition:'all 0.2s'}}>
-              <div style={{height:160,background:'#e0e0e0',backgroundImage:'url(https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=600&q=80)',backgroundSize:'cover',backgroundPosition:'center'}}></div>
-              <div style={{padding:20}}>
-                <span style={{color:'#0F6E56',fontSize:11,fontWeight:800,background:'#E1F5EE',padding:'4px 10px',borderRadius:12}}>בריאות</span>
-                <h3 style={{fontSize:17,fontWeight:700,color:'#111',marginTop:10,marginBottom:8}}>כוסות רוח - טרנד או רפואה?</h3>
-                <p style={{fontSize:13,color:'#666',lineHeight:1.6,marginBottom:16}}>למה ספורטאים מובילים משתמשים בזה, ואיך זה עוזר לשחרר שרירים תפוסים במיוחד.</p>
-                <div style={{fontSize:13,color:'#0F6E56',fontWeight:700}}>קרא עוד ←</div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -449,7 +556,7 @@ export default function Home() {
         </div>
       </footer>
 
-      {/* Quiz Component (עדיין קיים כדי שהלוגיקה תעבוד) */}
+      {/* Quiz Component */}
       <TherapyQuiz onResult={handleQuizResult} />
     </>
   )
