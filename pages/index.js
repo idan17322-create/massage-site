@@ -108,6 +108,11 @@ export default function Home() {
     return `https://wa.me/${intl}?text=${encodeURIComponent('היי '+t.name+', הגעתי דרך אתר מגע ואשמח לקבוע עיסוי 🙏')}`
   }
 
+  // פונקציה לפתיחת המחשבון
+  function openQuiz() {
+    window.dispatchEvent(new Event('open-quiz-modal'))
+  }
+
   const hasFilter = area || type || q || quizTypes.length > 0
 
   return (
@@ -122,23 +127,24 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <style>{`
           * { box-sizing:border-box; margin:0; padding:0; }
-          body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif; background:#f9f9f7; }
+          body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif; background:#f9f9f7; direction:rtl; }
           @keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
           @keyframes shimmer { 0%,100%{opacity:.5} 50%{opacity:.25} }
           .fade-up { animation:fadeUp 0.55s ease both; }
           .card-hover { transition:transform 0.22s ease,box-shadow 0.22s ease; }
           .card-hover:hover { transform:translateY(-4px); box-shadow:0 16px 48px rgba(0,0,0,0.11); }
+          .article-card:hover { transform:translateY(-4px); box-shadow:0 12px 30px rgba(0,0,0,0.08); }
           .wa-btn:hover { background:#0F6E56 !important; }
           .wa-btn { transition:background 0.15s; }
           input:focus, select:focus { border-color:#1D9E75 !important; box-shadow:0 0 0 3px rgba(29,158,117,0.12) !important; outline:none !important; }
           :focus-visible { outline:3px solid #1D9E75 !important; outline-offset:2px !important; }
           @media(max-width:640px) {
-            .hero-title { font-size:32px !important; }
+            .hero-title { font-size:36px !important; }
             .search-grid { grid-template-columns:1fr !important; }
             .cards-grid { grid-template-columns:1fr !important; }
             .stats-row { gap:16px !important; }
             .footer-inner { flex-direction:column; text-align:center; gap:12px !important; }
-            .hero-pad { padding:80px 16px 40px !important; }
+            .hero-pad { padding:90px 16px 40px !important; }
           }
         `}</style>
       </Head>
@@ -192,22 +198,22 @@ export default function Home() {
       </nav>
 
       {/* HERO */}
-      <div style={{minHeight:'92vh',position:'relative',display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden'}}>
+      <div style={{minHeight:'85vh',position:'relative',display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden'}}>
         <div style={{position:'absolute',inset:0,backgroundImage:'url(https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=1600&q=80)',backgroundSize:'cover',backgroundPosition:'center',filter:'brightness(0.42)'}} />
         <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom,rgba(5,40,30,0.25) 0%,rgba(5,40,30,0.7) 100%)'}} />
 
-        <div className="fade-up hero-pad" style={{position:'relative',zIndex:2,textAlign:'center',padding:'100px 24px 60px',maxWidth:680,width:'100%'}}>
+        <div className="fade-up hero-pad" style={{position:'relative',zIndex:2,textAlign:'center',padding:'80px 24px 40px',maxWidth:680,width:'100%'}}>
           <div style={{display:'inline-block',background:'rgba(255,255,255,0.15)',backdropFilter:'blur(10px)',border:'1px solid rgba(255,255,255,0.2)',borderRadius:30,padding:'5px 16px',fontSize:11,color:'rgba(255,255,255,0.9)',letterSpacing:'1.5px',textTransform:'uppercase',marginBottom:20,fontWeight:600}}>
             פלטפורמת העיסוי #1 בישראל
           </div>
-          <h1 className="hero-title" style={{color:'#fff',fontSize:52,fontWeight:800,lineHeight:1.1,marginBottom:16,letterSpacing:'-0.8px',textShadow:'0 2px 20px rgba(0,0,0,0.3)'}}>
+          <h1 className="hero-title" style={{color:'#fff',fontSize:48,fontWeight:800,lineHeight:1.1,marginBottom:12,letterSpacing:'-0.8px',textShadow:'0 2px 20px rgba(0,0,0,0.3)'}}>
             מטפל מוסמך<br /><span style={{color:'#6EE7B7'}}>עד אליך הביתה</span>
           </h1>
-          <p style={{color:'rgba(255,255,255,0.8)',fontSize:17,marginBottom:36,lineHeight:1.7}}>
+          <p style={{color:'rgba(255,255,255,0.8)',fontSize:17,marginBottom:24,lineHeight:1.7}}>
             בחר עיר, מצא מטפל מאושר, שלח הודעה — הכל בפחות מדקה
           </p>
 
-          <div className="stats-row" style={{display:'flex',justifyContent:'center',gap:32,marginBottom:32}}>
+          <div className="stats-row" style={{display:'flex',justifyContent:'center',gap:32,marginBottom:28}}>
             {[['200+','מטפלים'],['4.9★','דירוג'],['50+ ערים','כיסוי']].map(([n,l],i)=>(
               <div key={l} style={{padding:'12px 20px',textAlign:'center',background:'rgba(255,255,255,0.1)',backdropFilter:'blur(12px)',borderRadius:14,border:'1px solid rgba(255,255,255,0.15)'}}>
                 <div style={{color:'#fff',fontSize:18,fontWeight:800}}>{n}</div>
@@ -216,6 +222,7 @@ export default function Home() {
             ))}
           </div>
 
+          {/* אזור החיפוש והמחשבון */}
           <div style={{background:'rgba(255,255,255,0.97)',borderRadius:24,padding:18,maxWidth:560,margin:'0 auto',boxShadow:'0 32px 80px rgba(0,0,0,0.35)'}}>
             <div style={{position:'relative',marginBottom:10}}>
               <span style={{position:'absolute',right:14,top:'50%',transform:'translateY(-50%)',fontSize:16,color:'#bbb',pointerEvents:'none'}}>🔍</span>
@@ -226,20 +233,25 @@ export default function Home() {
             </div>
             <div className="search-grid" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
               <select value={area} onChange={e=>setArea(e.target.value)} aria-label="סינון לפי עיר"
-                style={{border:'1.5px solid #efefef',borderRadius:14,padding:'11px 12px',fontSize:13,color:'#444',background:'#fafafa',fontFamily:'inherit',width:'100%'}}>
+                style={{border:'1.5px solid #efefef',borderRadius:14,padding:'11px 12px',fontSize:13,color:'#444',background:'#fafafa',fontFamily:'inherit',width:'100%',cursor:'pointer'}}>
                 <option value="">כל הערים</option>
                 {AREAS.sort().map(a=><option key={a}>{a}</option>)}
               </select>
               <select value={type} onChange={e=>setType(e.target.value)} aria-label="סינון לפי סוג טיפול"
-                style={{border:'1.5px solid #efefef',borderRadius:14,padding:'11px 12px',fontSize:13,color:'#444',background:'#fafafa',fontFamily:'inherit',width:'100%'}}>
+                style={{border:'1.5px solid #efefef',borderRadius:14,padding:'11px 12px',fontSize:13,color:'#444',background:'#fafafa',fontFamily:'inherit',width:'100%',cursor:'pointer'}}>
                 <option value="">כל הטיפולים</option>
                 {TYPES.map(t=><option key={t}>{t}</option>)}
               </select>
             </div>
+
+            {/* כפתור המחשבון החדש */}
+            <button onClick={openQuiz} style={{marginTop: 12, width: '100%', background: 'linear-gradient(135deg, #E1F5EE, #C6EADD)', color: '#0F6E56', borderRadius: 14, padding: '12px', fontSize: 14, fontWeight: 700, border: '1px solid #9FE1CB', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8, transition: 'all 0.2s'}}>
+              <span>✨</span> לא בטוחים איזה עיסוי מתאים לכם? נסו את המחשבון
+            </button>
           </div>
         </div>
 
-        <div style={{position:'absolute',bottom:24,left:'50%',transform:'translateX(-50%)',display:'flex',flexDirection:'column',alignItems:'center',gap:5,opacity:0.6}}>
+        <div style={{position:'absolute',bottom:20,left:'50%',transform:'translateX(-50%)',display:'flex',flexDirection:'column',alignItems:'center',gap:5,opacity:0.6}}>
           <span style={{color:'#fff',fontSize:11}}>גלול למטה</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round"><path d="M6 9l6 6 6-6"/></svg>
         </div>
@@ -362,6 +374,51 @@ export default function Home() {
         </div>
       </main>
 
+      {/* ARTICLES SECTION - תבניות למאמרים */}
+      <section style={{background:'#fff',padding:'60px 16px',borderTop:'1px solid #efefef'}}>
+        <div style={{maxWidth:1140,margin:'0 auto'}}>
+          <div style={{textAlign:'center',marginBottom:40}}>
+            <h2 style={{fontSize:26,fontWeight:800,color:'#111',letterSpacing:'-0.4px',marginBottom:8}}>מגזין מגע</h2>
+            <p style={{color:'#777',fontSize:15}}>כל מה שצריך לדעת כדי להפיק את המקסימום מהטיפול שלכם</p>
+          </div>
+          
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))',gap:24}}>
+            {/* מאמר 1 */}
+            <div className="article-card" style={{background:'#fafafa',borderRadius:20,overflow:'hidden',border:'1px solid #efefef',cursor:'pointer',transition:'all 0.2s'}}>
+              <div style={{height:160,background:'#e0e0e0',backgroundImage:'url(https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&q=80)',backgroundSize:'cover',backgroundPosition:'center'}}></div>
+              <div style={{padding:20}}>
+                <span style={{color:'#0F6E56',fontSize:11,fontWeight:800,background:'#E1F5EE',padding:'4px 10px',borderRadius:12}}>מדריך</span>
+                <h3 style={{fontSize:17,fontWeight:700,color:'#111',marginTop:10,marginBottom:8}}>עיסוי שוודי או רקמות עמוקות?</h3>
+                <p style={{fontSize:13,color:'#666',lineHeight:1.6,marginBottom:16}}>מה ההבדל בין שני הטיפולים הנפוצים ביותר ואיך תדעו מה הגוף שלכם צריך עכשיו.</p>
+                <div style={{fontSize:13,color:'#0F6E56',fontWeight:700}}>קרא עוד ←</div>
+              </div>
+            </div>
+
+            {/* מאמר 2 */}
+            <div className="article-card" style={{background:'#fafafa',borderRadius:20,overflow:'hidden',border:'1px solid #efefef',cursor:'pointer',transition:'all 0.2s'}}>
+              <div style={{height:160,background:'#e0e0e0',backgroundImage:'url(https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=600&q=80)',backgroundSize:'cover',backgroundPosition:'center'}}></div>
+              <div style={{padding:20}}>
+                <span style={{color:'#0F6E56',fontSize:11,fontWeight:800,background:'#E1F5EE',padding:'4px 10px',borderRadius:12}}>טיפים</span>
+                <h3 style={{fontSize:17,fontWeight:700,color:'#111',marginTop:10,marginBottom:8}}>5 הכנות לעיסוי עד הבית</h3>
+                <p style={{fontSize:13,color:'#666',lineHeight:1.6,marginBottom:16}}>איך להכין את החדר, מה ללבוש, וכל מה שצריך לדעת לפני שהמטפל דופק בדלת.</p>
+                <div style={{fontSize:13,color:'#0F6E56',fontWeight:700}}>קרא עוד ←</div>
+              </div>
+            </div>
+
+            {/* מאמר 3 */}
+            <div className="article-card" style={{background:'#fafafa',borderRadius:20,overflow:'hidden',border:'1px solid #efefef',cursor:'pointer',transition:'all 0.2s'}}>
+              <div style={{height:160,background:'#e0e0e0',backgroundImage:'url(https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=600&q=80)',backgroundSize:'cover',backgroundPosition:'center'}}></div>
+              <div style={{padding:20}}>
+                <span style={{color:'#0F6E56',fontSize:11,fontWeight:800,background:'#E1F5EE',padding:'4px 10px',borderRadius:12}}>בריאות</span>
+                <h3 style={{fontSize:17,fontWeight:700,color:'#111',marginTop:10,marginBottom:8}}>כוסות רוח - טרנד או רפואה?</h3>
+                <p style={{fontSize:13,color:'#666',lineHeight:1.6,marginBottom:16}}>למה ספורטאים מובילים משתמשים בזה, ואיך זה עוזר לשחרר שרירים תפוסים במיוחד.</p>
+                <div style={{fontSize:13,color:'#0F6E56',fontWeight:700}}>קרא עוד ←</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* JOIN */}
       <div style={{background:'linear-gradient(135deg,#0a5c45,#0F6E56)',padding:'56px 20px',textAlign:'center',position:'relative',overflow:'hidden'}}>
         <div style={{position:'relative',zIndex:1}}>
@@ -386,25 +443,13 @@ export default function Home() {
             <a href="/terms" style={{fontSize:13,color:'#aaa',textDecoration:'none'}}>תקנון</a>
             <a href="/therapist-terms" style={{fontSize:13,color:'#aaa',textDecoration:'none'}}>תקנון מטפלים</a>
             <a href="/privacy" style={{fontSize:13,color:'#aaa',textDecoration:'none'}}>פרטיות</a>
-            <a href="mailto:idan17322@gmail.com" style={{fontSize:13,color:'#aaa',textDecoration:'none'}}>📧 מייל</a>
-            <a href="https://wa.me/9720538308886" target="_blank" rel="noopener noreferrer" style={{fontSize:13,color:'#aaa',textDecoration:'none'}}>💬 וואטסאפ</a>
+            <a href="mailto:info@maga.co.il" style={{fontSize:13,color:'#aaa',textDecoration:'none'}}>📧 קשר</a>
           </div>
           <p style={{fontSize:12,color:'#ddd'}}>© 2024 מגע</p>
         </div>
       </footer>
 
-      {/* WhatsApp FAB */}
-      <a href="https://wa.me/9720538308886" target="_blank" rel="noopener noreferrer"
-        aria-label="צור קשר בוואטסאפ"
-        style={{position:'fixed',bottom:24,left:20,zIndex:999,width:54,height:54,background:'#25D366',borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',boxShadow:'0 4px 22px rgba(37,211,102,0.5)',textDecoration:'none',transition:'transform 0.2s'}}
-        onMouseEnter={e=>e.currentTarget.style.transform='scale(1.12)'}
-        onMouseLeave={e=>e.currentTarget.style.transform='scale(1)'}>
-        <svg width="27" height="27" viewBox="0 0 24 24" fill="white">
-          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a13 13 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.135.562 4.14 1.54 5.873L.057 23.25a.75.75 0 00.916.916l5.377-1.483A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.98 0-3.852-.538-5.462-1.48l-.392-.23-3.35.924.924-3.35-.23-.392A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
-        </svg>
-      </a>
-
-      {/* Quiz */}
+      {/* Quiz Component (עדיין קיים כדי שהלוגיקה תעבוד) */}
       <TherapyQuiz onResult={handleQuizResult} />
     </>
   )

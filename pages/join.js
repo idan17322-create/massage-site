@@ -29,7 +29,7 @@ const TYPE_CATEGORIES = [
 const LEGAL_CONSENT = 'אני מאשר שקראתי והסכמתי לתנאי השימוש, לתקנון המטפלים ולמדיניות הפרטיות. אני מצהיר כי אני פועל מרצוני החופשי, בעל הסמכה מתאימה ופוטר את הנהלת האתר מכל אחריות לכל נזק, ישיר או עקיף, שעלול להיגרם מהשימוש בשירות.'
 
 export default function Join() {
-  const [form, setForm]                 = useState({ name:'', phone:'', city:'', price:'', experience:'', description:'' })
+  const [form, setForm]                 = useState({ name:'', phone:'', city:'', experience:'', description:'' })
   const [types, setTypes]               = useState([])
   const [imageFile, setImageFile]       = useState(null)
   const [imagePreview, setImagePreview] = useState(null)
@@ -63,7 +63,6 @@ export default function Join() {
     if (!form.name.trim()) e.name = 'שם חובה'
     if (!form.phone.match(/^0[0-9]{9}$/)) e.phone = 'מספר טלפון לא תקין (10 ספרות)'
     if (!form.city) e.city = 'בחר עיר'
-    if (!form.price || isNaN(form.price) || +form.price < 50) e.price = 'מחיר לא תקין (מינימום 50₪)'
     if (types.length === 0) e.types = 'בחר לפחות סוג טיפול אחד'
     if (!agreed) e.agreed = 'יש לאשר את כל התנאים כדי להמשיך'
     return e
@@ -90,10 +89,7 @@ export default function Join() {
 
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('therapist-images')
-        .upload(filename, imageFile, {
-          contentType: imageFile.type,
-          upsert: false
-        })
+        .upload(filename, imageFile, { contentType: imageFile.type, upsert: false })
 
       if (uploadError) {
         alert('שגיאה בהעלאת התמונה: ' + uploadError.message)
@@ -118,7 +114,7 @@ export default function Join() {
       city: form.city,
       area: form.city,
       types,
-      price: parseInt(form.price),
+      price: 0, // ברירת מחדל עד שנסגר מול עידן
       experience: form.experience ? parseInt(form.experience) : null,
       description: form.description.trim(),
       image_url: imageUrl,
@@ -149,8 +145,8 @@ export default function Join() {
           <p style={{ fontSize: 13, color: '#166534', lineHeight: 1.8 }}>
             ✓ הנהלת האתר תבדוק את הפרטים<br />
             ✓ ייתכן שנבקש תעודות הסמכה<br />
-            ✓ לאחר האישור תופיע בפלטפורמה<br />
-            ✓ חיוב ראשון: 25₪ בלבד
+            ✓ <strong>ניצור איתך קשר בוואטסאפ לתיאום התשלום והפרסום</strong><br />
+            ✓ לאחר האישור תופיע בפלטפורמה
           </p>
         </div>
         <Link href="/" style={{ background: '#0F6E56', color: '#fff', borderRadius: 20, padding: '12px 28px', fontSize: 14, fontWeight: 700, textDecoration: 'none', display: 'inline-block' }}>
@@ -188,25 +184,27 @@ export default function Join() {
           <p style={{ color: '#aaa', fontSize: 14 }}>מלא את הפרטים — נאשר ונפרסם אותך תוך 24 שעות</p>
         </div>
 
-        <div style={{ background: 'linear-gradient(135deg,#0F6E56,#1D9E75)', borderRadius: 18, padding: '16px 20px', marginBottom: 20, display: 'flex', justifyContent: 'space-around', alignItems: 'center', color: '#fff' }}>
-          <div style={{ textAlign: 'center' }}>
-            <p style={{ fontSize: 12, opacity: 0.8, marginBottom: 3 }}>חודש ראשון</p>
-            <p style={{ fontSize: 24, fontWeight: 800 }}>25₪</p>
-          </div>
-          <div style={{ width: 1, height: 40, background: 'rgba(255,255,255,0.3)' }} />
-          <div style={{ textAlign: 'center' }}>
-            <p style={{ fontSize: 12, opacity: 0.8, marginBottom: 3 }}>מהחודש השני</p>
-            <p style={{ fontSize: 24, fontWeight: 800 }}>39₪<span style={{ fontSize: 12, fontWeight: 400, opacity: 0.8 }}>/חודש</span></p>
-          </div>
-          <div style={{ width: 1, height: 40, background: 'rgba(255,255,255,0.3)' }} />
-          <div style={{ textAlign: 'center' }}>
-            <p style={{ fontSize: 12, opacity: 0.8, marginBottom: 3 }}>אישור</p>
-            <p style={{ fontSize: 14, fontWeight: 700 }}>24 שע׳</p>
-          </div>
+        {/* באנר מחיר — סקרני וחדש */}
+        <div style={{ background: '#f0fdf4', borderRadius: 18, padding: '16px 20px', marginBottom: 20, border: '1.5px solid #9FE1CB', textAlign: 'center' }}>
+          <p style={{ fontSize: 15, fontWeight: 700, color: '#065F46', marginBottom: 6 }}>💎 הצטרפות למאגר המטפלים</p>
+          <p style={{ fontSize: 14, color: '#0F6E56', lineHeight: 1.7, margin: 0 }}>
+            הצטרפות למאגר כרוכה בתשלום דמי מנוי חודשיים לאחר אישור המנהל.<br />
+            <strong>פרטים מדויקים יישלחו אליך בוואטסאפ לאחר בדיקת התעודות.</strong>
+          </p>
+        </div>
+
+        {/* קישור לתקנון מטפלים */}
+        <div style={{ background: '#fffbeb', borderRadius: 14, padding: '12px 16px', marginBottom: 20, border: '1px solid #FCD34D', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ fontSize: 13, color: '#92400E', fontWeight: 600 }}>📋 חשוב לקרוא לפני ההרשמה</span>
+          <a href="/therapist-terms" target="_blank" rel="noopener noreferrer"
+            style={{ fontSize: 13, color: '#0F6E56', fontWeight: 700, textDecoration: 'none', border: '1px solid #0F6E56', borderRadius: 20, padding: '4px 12px' }}>
+            תקנון מטפלים ←
+          </a>
         </div>
 
         <form onSubmit={handleSubmit} noValidate style={{ background: '#fff', borderRadius: 24, padding: 24, border: '1px solid #efefef', display: 'flex', flexDirection: 'column', gap: 18, boxShadow: '0 2px 20px rgba(0,0,0,0.04)' }}>
 
+          {/* תמונה */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
             <div onClick={() => document.getElementById('img-input').click()}
               style={{ width: 90, height: 90, borderRadius: '50%', background: '#f5f5f5', overflow: 'hidden', border: '2px dashed #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
@@ -224,12 +222,14 @@ export default function Join() {
             <p style={{ fontSize: 11, color: '#ccc' }}>מקסימום 5MB · JPG / PNG</p>
           </div>
 
+          {/* שם */}
           <div>
             <label htmlFor="f-name" style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#444', marginBottom: 6 }}>שם מלא *</label>
             <input id="f-name" name="name" value={form.name} onChange={handleInput} placeholder="שם פרטי ומשפחה" style={inp(errors.name)} />
             {errors.name && <p role="alert" style={{ color: '#f87171', fontSize: 12, marginTop: 4 }}>{errors.name}</p>}
           </div>
 
+          {/* טלפון */}
           <div>
             <label htmlFor="f-phone" style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#444', marginBottom: 6 }}>טלפון וואטסאפ *</label>
             <input id="f-phone" name="phone" value={form.phone} onChange={handleInput} placeholder="0501234567" type="tel" dir="ltr" style={inp(errors.phone)} />
@@ -237,22 +237,17 @@ export default function Join() {
             <p style={{ fontSize: 11, color: '#bbb', marginTop: 4 }}>לקוחות יפנו אליך ישירות לוואטסאפ</p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-            <div>
-              <label htmlFor="f-city" style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#444', marginBottom: 6 }}>עיר פעילות *</label>
-              <select id="f-city" name="city" value={form.city} onChange={handleInput} style={{ ...inp(errors.city), cursor: 'pointer' }}>
-                <option value="">בחר עיר</option>
-                {CITIES.sort().map(c => <option key={c}>{c}</option>)}
-              </select>
-              {errors.city && <p role="alert" style={{ color: '#f87171', fontSize: 12, marginTop: 4 }}>{errors.city}</p>}
-            </div>
-            <div>
-              <label htmlFor="f-price" style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#444', marginBottom: 6 }}>מחיר ל-60 דקות (₪) *</label>
-              <input id="f-price" name="price" value={form.price} onChange={handleInput} placeholder="250" type="number" min="50" dir="ltr" style={inp(errors.price)} />
-              {errors.price && <p role="alert" style={{ color: '#f87171', fontSize: 12, marginTop: 4 }}>{errors.price}</p>}
-            </div>
+          {/* עיר */}
+          <div>
+            <label htmlFor="f-city" style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#444', marginBottom: 6 }}>עיר פעילות *</label>
+            <select id="f-city" name="city" value={form.city} onChange={handleInput} style={{ ...inp(errors.city), cursor: 'pointer' }}>
+              <option value="">בחר עיר</option>
+              {CITIES.sort().map(c => <option key={c}>{c}</option>)}
+            </select>
+            {errors.city && <p role="alert" style={{ color: '#f87171', fontSize: 12, marginTop: 4 }}>{errors.city}</p>}
           </div>
 
+          {/* סוגי טיפולים */}
           <div>
             <p style={{ fontSize: 13, fontWeight: 600, color: '#444', marginBottom: 12 }}>
               סוגי טיפולים *
@@ -284,11 +279,13 @@ export default function Join() {
             {errors.types && <p role="alert" style={{ color: '#f87171', fontSize: 12, marginTop: 8 }}>{errors.types}</p>}
           </div>
 
+          {/* ניסיון */}
           <div>
             <label htmlFor="f-exp" style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#444', marginBottom: 6 }}>שנות ניסיון</label>
             <input id="f-exp" name="experience" value={form.experience} onChange={handleInput} placeholder="5" type="number" min="0" dir="ltr" style={inp(false)} />
           </div>
 
+          {/* תיאור */}
           <div>
             <label htmlFor="f-desc" style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#444', marginBottom: 6 }}>תיאור קצר</label>
             <textarea id="f-desc" name="description" value={form.description} onChange={handleInput}
@@ -296,6 +293,7 @@ export default function Join() {
               rows={3} style={{ ...inp(false), resize: 'vertical', lineHeight: 1.6 }} />
           </div>
 
+          {/* checkbox תקנון */}
           <div style={{ background: errors.agreed ? '#fff5f5' : '#f9fdf9', borderRadius: 16, padding: 18, border: `1.5px solid ${errors.agreed ? '#f87171' : '#d4edda'}` }}>
             <label style={{ display: 'flex', alignItems: 'flex-start', gap: 12, cursor: 'pointer' }}>
               <input

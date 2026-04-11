@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const QUESTIONS = [
   {
@@ -72,6 +72,17 @@ export default function TherapyQuiz({ onResult }) {
   const [answers, setAnswers] = useState({})
   const [result, setResult]   = useState(null)
   const [anim, setAnim]       = useState('in')
+
+  // === התוספת שלנו מתחילה כאן ===
+  useEffect(() => {
+    const handleOpen = () => {
+      reset() // מאפס את המחשבון
+      setTimeout(() => setOpen(true), 10) // פותח אותו
+    }
+    window.addEventListener('open-quiz-modal', handleOpen)
+    return () => window.removeEventListener('open-quiz-modal', handleOpen)
+  }, [])
+  // === התוספת שלנו נגמרת כאן ===
 
   function handleOption(value) {
     const newAnswers = { ...answers, [QUESTIONS[step].id]: value }
