@@ -20,35 +20,23 @@ const CITIES = [
 ]
 
 const TYPE_CATEGORIES = [
-  {
-    label: 'עיסויים קלאסיים',
-    types: ['שוודי','רקמות עמוקות','ספורט','תאילנדי','הריון']
-  },
-  {
-    label: 'טיפולים מיוחדים',
-    types: ['שיאצו','רפלקסולוגיה','לימפה','אבנים חמות','עיסוי פנים','ארומתרפיה']
-  },
-  {
-    label: 'רפואה משלימה',
-    types: ['רפואה סינית / דיקור','כוסות רוח','עיסוי הוליסטי','טיפול רגשי-גוף']
-  },
-  {
-    label: 'שיקום ובריאות',
-    types: ['פיזיותרפיה']
-  }
+  { label: 'עיסויים קלאסיים', types: ['שוודי','רקמות עמוקות','ספורט','תאילנדי','הריון'] },
+  { label: 'טיפולים מיוחדים', types: ['שיאצו','רפלקסולוגיה','לימפה','אבנים חמות','עיסוי פנים','ארומתרפיה'] },
+  { label: 'רפואה משלימה',    types: ['רפואה סינית / דיקור','כוסות רוח','עיסוי הוליסטי','טיפול רגשי-גוף'] },
+  { label: 'שיקום ובריאות',   types: ['פיזיותרפיה'] }
 ]
 
-const AGREED_TEXT = 'אני מאשר שקראתי את תקנון המטפלים ואני מסכים לתנאי התשלום (25 ש"ח לחודש ראשון ו-39 ש"ח החל מהחודש השני)'
+const LEGAL_CONSENT = 'אני מאשר שקראתי והסכמתי לתנאי השימוש, לתקנון המטפלים ולמדיניות הפרטיות. אני מצהיר כי אני פועל מרצוני החופשי, בעל הסמכה מתאימה ופוטר את הנהלת האתר מכל אחריות לכל נזק, ישיר או עקיף, שעלול להיגרם מהשימוש בשירות.'
 
 export default function Join() {
-  const [form, setForm] = useState({ name:'', phone:'', city:'', price:'', experience:'', description:'' })
-  const [types, setTypes] = useState([])
-  const [imageFile, setImageFile] = useState(null)
+  const [form, setForm]                 = useState({ name:'', phone:'', city:'', price:'', experience:'', description:'' })
+  const [types, setTypes]               = useState([])
+  const [imageFile, setImageFile]       = useState(null)
   const [imagePreview, setImagePreview] = useState(null)
-  const [agreed, setAgreed] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [success, setSuccess] = useState(false)
-  const [errors, setErrors] = useState({})
+  const [agreed, setAgreed]             = useState(false)
+  const [loading, setLoading]           = useState(false)
+  const [success, setSuccess]           = useState(false)
+  const [errors, setErrors]             = useState({})
 
   function handleInput(e) {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -77,7 +65,7 @@ export default function Join() {
     if (!form.city) e.city = 'בחר עיר'
     if (!form.price || isNaN(form.price) || +form.price < 50) e.price = 'מחיר לא תקין (מינימום 50₪)'
     if (types.length === 0) e.types = 'בחר לפחות סוג טיפול אחד'
-    if (!agreed) e.agreed = 'יש לאשר את התקנון ותנאי התשלום כדי להמשיך'
+    if (!agreed) e.agreed = 'יש לאשר את כל התנאים כדי להמשיך'
     return e
   }
 
@@ -95,16 +83,29 @@ export default function Join() {
     setLoading(true)
 
     let imageUrl = null
+
     if (imageFile) {
-      const ext = imageFile.name.split('.').pop()
+      const ext = imageFile.name.split('.').pop().toLowerCase()
       const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
-      const { error: uploadError } = await supabase.storage
+
+      const { data: uploadData, error: uploadError } = await supabase.storage
         .from('therapist-images')
-        .upload(filename, imageFile, { contentType: imageFile.type })
-      if (!uploadError) {
-        const { data: urlData } = supabase.storage.from('therapist-images').getPublicUrl(filename)
-        imageUrl = urlData.publicUrl
+        .upload(filename, imageFile, {
+          contentType: imageFile.type,
+          upsert: false
+        })
+
+      if (uploadError) {
+        alert('שגיאה בהעלאת התמונה: ' + uploadError.message)
+        setLoading(false)
+        return
       }
+
+      const { data: urlData } = supabase.storage
+        .from('therapist-images')
+        .getPublicUrl(uploadData.path)
+
+      imageUrl = urlData.publicUrl
     }
 
     const phone = form.phone.replace(/[^0-9]/g, '')
@@ -126,8 +127,8 @@ export default function Join() {
       featured: false,
       agreed_to_terms: true,
       agreed_at: new Date().toISOString(),
-      terms_version: '1.0',
-      agreed_text: AGREED_TEXT,
+      terms_version: '2.0',
+      agreed_text: LEGAL_CONSENT,
     }])
 
     setLoading(false)
@@ -261,23 +262,18 @@ export default function Join() {
                 </span>
               )}
             </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
               {TYPE_CATEGORIES.map(cat => (
                 <div key={cat.label}>
-                  <p style={{ fontSize: 11, fontWeight: 700, color: '#bbb', letterSpacing: '0.6px', textTransform: 'uppercase', marginBottom: 8 }}>
-                    {cat.label}
-                  </p>
+                  <p style={{ fontSize: 11, fontWeight: 700, color: '#bbb', letterSpacing: '0.6px', textTransform: 'uppercase', marginBottom: 8 }}>{cat.label}</p>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
                     {cat.types.map(t => (
                       <button key={t} type="button" onClick={() => toggleType(t)} aria-pressed={types.includes(t)}
-                        style={{
-                          padding: '7px 14px', borderRadius: 20, fontSize: 13,
-                          border: '1.5px solid', cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.15s',
+                        style={{ padding: '7px 14px', borderRadius: 20, fontSize: 13, border: '1.5px solid', cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.15s',
                           borderColor: types.includes(t) ? '#0F6E56' : '#e8e8e8',
                           background: types.includes(t) ? '#0F6E56' : '#fafafa',
                           color: types.includes(t) ? '#fff' : '#555',
-                          fontWeight: types.includes(t) ? 700 : 400,
-                        }}>
+                          fontWeight: types.includes(t) ? 700 : 400 }}>
                         {t}
                       </button>
                     ))}
@@ -300,24 +296,24 @@ export default function Join() {
               rows={3} style={{ ...inp(false), resize: 'vertical', lineHeight: 1.6 }} />
           </div>
 
-          <div style={{ background: errors.agreed ? '#fff5f5' : '#f9fdf9', borderRadius: 16, padding: 16, border: `1.5px solid ${errors.agreed ? '#f87171' : '#d4edda'}` }}>
+          <div style={{ background: errors.agreed ? '#fff5f5' : '#f9fdf9', borderRadius: 16, padding: 18, border: `1.5px solid ${errors.agreed ? '#f87171' : '#d4edda'}` }}>
             <label style={{ display: 'flex', alignItems: 'flex-start', gap: 12, cursor: 'pointer' }}>
               <input
-                type="checkbox"
-                checked={agreed}
+                type="checkbox" checked={agreed}
                 onChange={e => { setAgreed(e.target.checked); if (errors.agreed) setErrors({ ...errors, agreed: '' }) }}
                 aria-required="true"
                 style={{ width: 20, height: 20, marginTop: 3, accentColor: '#0F6E56', cursor: 'pointer', flexShrink: 0 }}
               />
-              <span style={{ fontSize: 13, color: '#333', lineHeight: 1.7 }}>
-                <strong>{AGREED_TEXT}.</strong>
+              <span style={{ fontSize: 13, color: '#333', lineHeight: 1.75 }}>
+                {LEGAL_CONSENT}
                 <br />
-                <span style={{ fontSize: 12, color: '#777' }}>
-                  קראתי ואני מסכים/ה ל
-                  <a href="/terms" target="_blank" rel="noopener noreferrer" style={{ color: '#0F6E56', fontWeight: 700, textDecoration: 'none' }}> תקנון האתר </a>
-                  ול
-                  <a href="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: '#0F6E56', fontWeight: 700, textDecoration: 'none' }}> מדיניות הפרטיות</a>.
-                  אני מאשר/ת שהפרטים שמסרתי נכונים ושאני בעל/ת הכשרה מתאימה.
+                <span style={{ fontSize: 12, color: '#888', marginTop: 6, display: 'block' }}>
+                  קראתי את:{' '}
+                  <a href="/terms" target="_blank" rel="noopener noreferrer" style={{ color: '#0F6E56', fontWeight: 700, textDecoration: 'none' }}>תנאי שימוש</a>
+                  {' · '}
+                  <a href="/therapist-terms" target="_blank" rel="noopener noreferrer" style={{ color: '#0F6E56', fontWeight: 700, textDecoration: 'none' }}>תקנון מטפלים</a>
+                  {' · '}
+                  <a href="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: '#0F6E56', fontWeight: 700, textDecoration: 'none' }}>מדיניות פרטיות</a>
                 </span>
               </span>
             </label>
@@ -327,13 +323,7 @@ export default function Join() {
           <input name="website" tabIndex="-1" autoComplete="off" style={{ display: 'none' }} />
 
           <button type="submit" disabled={loading}
-            style={{
-              background: loading ? '#7ec9b0' : agreed ? '#0F6E56' : '#ccc',
-              color: '#fff', border: 'none', borderRadius: 16, padding: '15px',
-              fontSize: 15, fontWeight: 800, cursor: loading ? 'not-allowed' : 'pointer',
-              fontFamily: 'inherit', transition: 'all 0.2s',
-              boxShadow: agreed ? '0 4px 14px rgba(15,110,86,0.3)' : 'none',
-            }}>
+            style={{ background: loading ? '#7ec9b0' : agreed ? '#0F6E56' : '#ccc', color: '#fff', border: 'none', borderRadius: 16, padding: '15px', fontSize: 15, fontWeight: 800, cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'inherit', transition: 'all 0.2s', boxShadow: agreed ? '0 4px 14px rgba(15,110,86,0.3)' : 'none' }}>
             {loading ? 'שולח בקשה...' : 'שלח בקשת הרשמה →'}
           </button>
 
