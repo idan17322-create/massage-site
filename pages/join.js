@@ -305,7 +305,7 @@ export default function Join() {
                 style={{ width: 20, height: 20, marginTop: 3, accentColor: '#0F6E56', cursor: 'pointer', flexShrink: 0 }}
               />
               <span style={{ fontSize: 13, color: '#333', lineHeight: 1.75 }}>
-                {LEGAL_CONSENT}
+                <strong>{LEGAL_CONSENT}</strong>
                 <br />
                 <span style={{ fontSize: 12, color: '#888', marginTop: 6, display: 'block' }}>
                   קראתי את:{' '}
