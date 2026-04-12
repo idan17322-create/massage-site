@@ -30,7 +30,6 @@ const WA_ICON = (
   </svg>
 )
 
-// --- תוכן המאמרים שלנו ---
 const ARTICLES = [
   {
     id: 1,
@@ -41,13 +40,10 @@ const ARTICLES = [
     content: (
       <>
         <p>הגעתם למצב שבו הגוף פשוט דורש עיסוי, אבל כשאתם מסתכלים על רשימת הטיפולים אתם מתלבטים: שוודי קלאסי או רקמות עמוקות? זו אחת ההתלבטויות הנפוצות ביותר, וההבדל ביניהם משמעותי מאוד.</p>
-        
         <h4 style={{ fontSize: 18, color: '#0F6E56', marginTop: 24, marginBottom: 12 }}>עיסוי שוודי: החופשה של הגוף</h4>
         <p>העיסוי השוודי מתמקד בעיקר בשכבות העליונות של השריר. מטרתו היא להזרים דם למרכז הלב, להרפות שרירים מתוחים ולשחרר אנדורפינים. התנועות ארוכות, רכות ומלטפות, לרוב בשילוב שמנים. <br/><br/><strong>למי זה מתאים?</strong> למי שמרגיש "עייפות חומר", סטרס נפשי, עומס בעבודה, או פשוט רוצה שעת פינוק שבה הוא לא חושב על כלום. זהו עיסוי שמתאים כמעט לכולם, במיוחד למי שעושה עיסוי בפעם הראשונה.</p>
-
         <h4 style={{ fontSize: 18, color: '#0F6E56', marginTop: 24, marginBottom: 12 }}>רקמות עמוקות: שחרור ממוקד ותכליתי</h4>
         <p>בניגוד לשוודי, עיסוי רקמות עמוקות "נכנס פנימה". המטפל ישתמש במרפקים, באמות ובאצבעות כדי להפעיל לחץ ממוקד על ה"קשרים" (Trigger points) שבשריר וברקמת החיבור (פאשיה) שעוטפת אותו. הלחץ חזק יותר, ולפעמים עשוי להיות מעט לא נעים באותו רגע, אך השחרור שמגיע לאחר מכן הוא עמוק ומשמעותי.<br/><br/><strong>למי זה מתאים?</strong> למי שסובל מכאבים כרוניים (כמו כאבי גב תחתון או צוואר תפוס מהמחשב), לספורטאים, או לאנשים ש"רגילים" לעיסויים ומרגישים שעיסוי עדין פשוט לא מספיק להם.</p>
-
         <h4 style={{ fontSize: 18, color: '#0F6E56', marginTop: 24, marginBottom: 12 }}>השורה התחתונה</h4>
         <p>אם בא לכם לעצום עיניים ולהירדם – בחרו ב<strong>שוודי</strong>.<br/>אם יש לכם שריר ספציפי שכואב ומציק, ואתם מוכנים לעבודת עומק כדי לשחרר אותו – לכו על <strong>רקמות עמוקות</strong>.</p>
       </>
@@ -62,19 +58,14 @@ const ARTICLES = [
     content: (
       <>
         <p>הזמנתם עיסוי עד הבית? איזה כיף! היתרון הגדול ביותר הוא שאין צורך לנהוג הביתה, לחפש חניה או להיתקע בפקקים בדיוק אחרי שנרגעתם. כדי שהחוויה תהיה באמת ברמת ספא פרימיום, הנה 5 דברים שכדאי להכין מראש:</p>
-
         <h4 style={{ fontSize: 16, color: '#111', marginTop: 24, marginBottom: 8 }}>1. הכינו מרחב שקט (ונקי)</h4>
         <p>המטפל מביא איתו מיטת טיפולים, שמצריכה קצת מקום (בערך 2x1 מטר). פנו מקום בסלון או בחדר השינה כך שלמטפל יהיה נוח להסתובב סביב המיטה. מומלץ גם לעמעם את האורות, או אפילו להכין נר ריחני.</p>
-
         <h4 style={{ fontSize: 16, color: '#111', marginTop: 20, marginBottom: 8 }}>2. מקלחת חמה לפני</h4>
         <p>זה לא רק עניין של נימוס – מקלחת חמה מרפה את השרירים ופותחת את הנקבוביות, מה שעוזר לשמנים להיספג טוב יותר בעור ומכין את הגוף לקבל את העיסוי בצורה אפקטיבית יותר.</p>
-
         <h4 style={{ fontSize: 16, color: '#111', marginTop: 20, marginBottom: 8 }}>3. אל תאכלו ארוחה כבדה</h4>
         <p>כדאי להימנע מארוחה דשנה לפחות שעה-שעתיים לפני הטיפול. עיסוי כשהבטן מלאה עלול לגרום לאי-נוחות, במיוחד כששוכבים על הבטן.</p>
-
         <h4 style={{ fontSize: 16, color: '#111', marginTop: 20, marginBottom: 8 }}>4. טמפרטורת החדר</h4>
         <p>במהלך עיסוי טמפרטורת הגוף נוטה לצנוח מעט בגלל ההרפיה הכללית. ודאו שהחדר מחומם ונעים (או ממוזג במידה הנכונה בקיץ), כך שלא יהיה לכם קר מדי כשתשכבו על המיטה.</p>
-
         <h4 style={{ fontSize: 16, color: '#111', marginTop: 20, marginBottom: 8 }}>5. תתנתקו</h4>
         <p>העבירו את הטלפון למצב שקט, סגרו את הטלוויזיה (המטפל לרוב יביא מוזיקת רקע או שתוכלו לשים בעצמכם), ותנו לעצמכם רשות להיות שעה שלמה מנותקים מהעולם.</p>
       </>
@@ -89,22 +80,17 @@ const ARTICLES = [
     content: (
       <>
         <p>בשנים האחרונות אנחנו רואים יותר ויותר ספורטאים אולימפיים ומפורסמים מסתובבים עם עיגולים אדומים מוזרים על הגב והכתפיים. לא, הם לא הותקפו על ידי תמנון – זהו טיפול בכוסות רוח (Cupping Therapy). אבל מה זה בדיוק, והאם זה באמת עובד?</p>
-
         <h4 style={{ fontSize: 18, color: '#0F6E56', marginTop: 24, marginBottom: 12 }}>איך זה עובד?</h4>
         <p>טיפול בכוסות רוח הוא טכניקה עתיקה מתוך הרפואה הסינית. המטפל מניח כוסות (לרוב מזכוכית או סיליקון) על אזורים אסטרטגיים בגוף, ויוצר בהן ואקום. הוואקום מושך את העור ורקמת השריר כלפי מעלה לתוך הכוס.</p>
-
         <p>בעוד שעיסוי רגיל מפעיל לחץ <strong>פנימה</strong> כלפי השריר, כוסות הרוח מושכות את הרקמות <strong>החוצה</strong>. הפעולה הזו יוצרת זרימת דם מוגברת לאזור, מה שמעודד ריפוי טבעי ומאיץ פינוי של חומצת חלב ורעלים שנאגרו בשריר.</p>
-
         <h4 style={{ fontSize: 18, color: '#0F6E56', marginTop: 24, marginBottom: 12 }}>האם זה כואב?</h4>
         <p>רוב המטופלים מדווחים כי הטיפול אינו כואב כלל. התחושה היא של מתיחה עמוקה וחזקה, שבדרך כלל הופכת למרגיעה ומשחררת לאחר דקות ספורות. הסימנים האדומים או הכחולים (המוכרים כ"עיגולים") אינם שטפי דם כואבים, אלא סימן לדם שעלה לפני השטח – הם אינם כואבים למגע ונעלמים מעצמם תוך מספר ימים עד שבוע.</p>
-
         <h4 style={{ fontSize: 18, color: '#0F6E56', marginTop: 24, marginBottom: 12 }}>למי זה מומלץ?</h4>
         <p>כוסות רוח מעולות למי שסובל משרירים תפוסים מאוד שעיסוי רגיל מתקשה לשחרר, לספורטאים בתהליך התאוששות מאימונים אינטנסיביים, ולאנשים הסובלים מכאבי גב כרוניים, דלקות, או נוקשות בצוואר. זהו שילוב מצוין (שלרוב המטפלים מציעים) כהשלמה לעיסוי ספורט או רקמות עמוקות.</p>
       </>
     )
   }
 ];
-
 
 export default function Home() {
   const [list, setList]           = useState([])
@@ -113,13 +99,12 @@ export default function Home() {
   const [q, setQ]                 = useState('')
   const [area, setArea]           = useState('')
   const [type, setType]           = useState('')
+  const [gender, setGender]       = useState('') // הוספת סינון למגדר
   const [quizTypes, setQuizTypes] = useState([])
   const [scrolled, setScrolled]   = useState(false)
   const [fontSize, setFontSize]   = useState(100)
   const [contrast, setContrast]   = useState(false)
   const [a11yOpen, setA11yOpen]   = useState(false)
-  
-  // State למאמר הקופץ
   const [activeArticle, setActiveArticle] = useState(null)
 
   useEffect(() => {
@@ -129,9 +114,8 @@ export default function Home() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  useEffect(() => { filter() }, [list, q, area, type, quizTypes])
+  useEffect(() => { filter() }, [list, q, area, type, gender, quizTypes])
 
-  // מונע גלילה כשחלון מאמר פתוח
   useEffect(() => {
     if (activeArticle) {
       document.body.style.overflow = 'hidden';
@@ -163,6 +147,7 @@ export default function Home() {
     }
     if (area) r = r.filter(t => t.city === area || t.area === area)
     if (type) r = r.filter(t => (t.types||[]).includes(type))
+    if (gender) r = r.filter(t => t.gender === gender) // סינון לפי זכר/נקבה
     if (quizTypes.length > 0)
       r = r.filter(t => (t.types||[]).some(x => quizTypes.includes(x)))
     setShow(r)
@@ -170,23 +155,20 @@ export default function Home() {
 
   function handleQuizResult(types) {
     setQuizTypes(types)
-    setType('')
-    setQ('')
+    setType(''); setQ(''); setGender('');
   }
 
   function clearAll() {
-    setArea(''); setType(''); setQ(''); setQuizTypes([])
+    setArea(''); setType(''); setQ(''); setGender(''); setQuizTypes([])
   }
 
   function changeFont(d) {
     const n = Math.min(130, Math.max(80, fontSize + d))
-    setFontSize(n)
-    document.body.style.zoom = (n / 100).toString()
+    setFontSize(n); document.body.style.zoom = (n / 100).toString()
   }
 
   function toggleContrast() {
-    setContrast(!contrast)
-    document.body.style.filter = !contrast ? 'contrast(1.4)' : ''
+    setContrast(!contrast); document.body.style.filter = !contrast ? 'contrast(1.4)' : ''
   }
 
   function waHref(t) {
@@ -200,15 +182,15 @@ export default function Home() {
     window.dispatchEvent(new Event('open-quiz-modal'))
   }
 
-  const hasFilter = area || type || q || quizTypes.length > 0
+  const hasFilter = area || type || q || gender || quizTypes.length > 0
 
   return (
     <>
       <Head>
-        <title>מגע — מטפלים מוסמכים עד אליך הביתה</title>
+        <title>מגע — מטפלים מוסמכים אצלך או בקליניקה</title>
         <meta name="description" content="מצא מטפל עיסוי מוסמך ומאושר בעירך." />
         <meta name="google-site-verification" content="D_2W63wcSNAKxCBio3dJistesVY9QYwzVLgz-k8LfR0" />
-        <meta property="og:title" content="מגע — מטפלים מוסמכים עד אליך הביתה" />
+        <meta property="og:title" content="מגע — מטפלים מוסמכים אצלך או בקליניקה" />
         <meta property="og:description" content="מצא מטפל עיסוי מאושר בעירך תוך דקה." />
         <meta property="og:type" content="website" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -243,21 +225,17 @@ export default function Home() {
       {activeArticle && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px 16px' }} onClick={(e) => e.target === e.currentTarget && setActiveArticle(null)}>
           <div className="modal-anim" style={{ background: '#fff', borderRadius: 24, width: '100%', maxWidth: 700, maxHeight: '90vh', overflowY: 'auto', position: 'relative', boxShadow: '0 24px 60px rgba(0,0,0,0.3)' }}>
-            
             <button onClick={() => setActiveArticle(null)} style={{ position: 'absolute', top: 16, right: 16, width: 36, height: 36, borderRadius: '50%', background: 'rgba(255,255,255,0.9)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, color: '#333', zIndex: 10, boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}>✕</button>
-            
             <div style={{ width: '100%', height: 260, backgroundImage: `url(${activeArticle.image})`, backgroundSize: 'cover', backgroundPosition: 'center', borderTopLeftRadius: 24, borderTopRightRadius: 24, position: 'relative' }}>
               <div style={{ position: 'absolute', bottom: 20, right: 24, background: '#E1F5EE', color: '#0F6E56', padding: '6px 14px', borderRadius: 16, fontSize: 13, fontWeight: 800 }}>
                 {activeArticle.category}
               </div>
             </div>
-            
             <div style={{ padding: '32px 32px 40px', color: '#333', lineHeight: 1.8, fontSize: 16 }}>
               <h2 style={{ fontSize: 28, fontWeight: 800, color: '#111', marginBottom: 24, letterSpacing: '-0.5px', lineHeight: 1.3 }}>{activeArticle.title}</h2>
               <div style={{ color: '#444' }}>
                 {activeArticle.content}
               </div>
-              
               <div style={{ marginTop: 40, textAlign: 'center', borderTop: '1px solid #eee', paddingTop: 30 }}>
                 <p style={{ fontWeight: 700, fontSize: 18, marginBottom: 16, color: '#111' }}>עשה לכם חשק למסאז'?</p>
                 <button onClick={() => {
@@ -268,7 +246,6 @@ export default function Home() {
                 </button>
               </div>
             </div>
-
           </div>
         </div>
       )}
@@ -331,7 +308,7 @@ export default function Home() {
             פלטפורמת העיסוי #1 בישראל
           </div>
           <h1 className="hero-title" style={{color:'#fff',fontSize:48,fontWeight:800,lineHeight:1.1,marginBottom:12,letterSpacing:'-0.8px',textShadow:'0 2px 20px rgba(0,0,0,0.3)'}}>
-            מטפל מוסמך<br /><span style={{color:'#6EE7B7'}}>עד אליך הביתה</span>
+            מטפל מוסמך<br /><span style={{color:'#6EE7B7'}}>אצלך או בקליניקה</span>
           </h1>
           <p style={{color:'rgba(255,255,255,0.8)',fontSize:18,marginBottom:24,lineHeight:1.7}}>
             חווית הטיפול המושלמת, בהתאמה אישית.<br />המטפלים המובילים בישראל, עכשיו בהישג ידכם.
@@ -355,20 +332,29 @@ export default function Home() {
                 aria-label="חיפוש מטפל"
                 style={{width:'100%',border:'1.5px solid #efefef',borderRadius:14,padding:'12px 44px 12px 14px',fontSize:14,color:'#111',background:'#fafafa',fontFamily:'inherit',boxSizing:'border-box'}} />
             </div>
-            <div className="search-grid" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
+            
+            <div className="search-grid" style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:8}}>
               <select value={area} onChange={e=>setArea(e.target.value)} aria-label="סינון לפי עיר"
                 style={{border:'1.5px solid #efefef',borderRadius:14,padding:'11px 12px',fontSize:13,color:'#444',background:'#fafafa',fontFamily:'inherit',width:'100%',cursor:'pointer'}}>
                 <option value="">כל הערים</option>
                 {AREAS.sort().map(a=><option key={a}>{a}</option>)}
               </select>
+              
               <select value={type} onChange={e=>setType(e.target.value)} aria-label="סינון לפי סוג טיפול"
                 style={{border:'1.5px solid #efefef',borderRadius:14,padding:'11px 12px',fontSize:13,color:'#444',background:'#fafafa',fontFamily:'inherit',width:'100%',cursor:'pointer'}}>
                 <option value="">כל הטיפולים</option>
                 {TYPES.map(t=><option key={t}>{t}</option>)}
               </select>
+
+              {/* סינון לפי מגדר */}
+              <select value={gender} onChange={e=>setGender(e.target.value)} aria-label="סינון לפי מגדר"
+                style={{border:'1.5px solid #efefef',borderRadius:14,padding:'11px 12px',fontSize:13,color:'#444',background:'#fafafa',fontFamily:'inherit',width:'100%',cursor:'pointer'}}>
+                <option value="">גבר/אישה</option>
+                <option value="male">גבר</option>
+                <option value="female">אישה</option>
+              </select>
             </div>
 
-            {/* כפתור המחשבון החדש */}
             <button onClick={openQuiz} style={{marginTop: 12, width: '100%', background: 'linear-gradient(135deg, #E1F5EE, #C6EADD)', color: '#0F6E56', borderRadius: 14, padding: '12px', fontSize: 14, fontWeight: 700, border: '1px solid #9FE1CB', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8, transition: 'all 0.2s'}}>
               <span>✨</span> לא בטוחים איזה עיסוי מתאים לכם? נסו את המחשבון
             </button>
@@ -385,7 +371,6 @@ export default function Home() {
       <main id="main-content" style={{background:'#f9f9f7',minHeight:'60vh'}}>
         <div style={{maxWidth:1140,margin:'0 auto',padding:'40px 16px 60px'}}>
 
-          {/* Quiz banner */}
           {quizTypes.length > 0 && (
             <div style={{background:'linear-gradient(135deg,#0F6E56,#1D9E75)',borderRadius:18,padding:'14px 18px',marginBottom:20,display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:10}}>
               <div style={{display:'flex',alignItems:'center',gap:10}}>
@@ -453,8 +438,11 @@ export default function Home() {
                         <div style={{display:'flex',alignItems:'center',gap:6,flexWrap:'wrap',marginBottom:3}}>
                           <span style={{fontSize:15,fontWeight:700,color:'#111'}}>{t.name}</span>
                           <span style={{background:'#E1F5EE',color:'#065F46',fontSize:10,padding:'2px 7px',borderRadius:10,fontWeight:700}}>מאושר/ת</span>
+                          {/* תג מגדר חדש */}
+                          <span style={{background:'#F3F4F6', color:'#4B5563', fontSize:10, padding:'2px 7px', borderRadius:10, fontWeight:700}}>{t.gender === 'male' ? 'זכר' : 'נקבה'}</span>
                         </div>
-                        <div style={{fontSize:12,color:'#999',marginBottom:4}}>📍 {t.city||t.area} · ניידת</div>
+                        {/* דינמי: קליניקה או ניידת */}
+                        <div style={{fontSize:12,color:'#999',marginBottom:4}}>📍 {t.city||t.area} {t.is_mobile ? '· ניידת (עד הבית)' : '· קליניקה'}</div>
                         {t.rating && (
                           <div style={{fontSize:12}}>
                             <span style={{color:'#F59E0B'}}>{'★'.repeat(Math.round(t.rating))}{'☆'.repeat(5-Math.round(t.rating))}</span>
@@ -481,7 +469,8 @@ export default function Home() {
                     </div>
                     <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',borderTop:'1px solid #f5f5f3',paddingTop:12}}>
                       <div>
-                        <div style={{fontSize:17,fontWeight:800,color:'#111'}}>מ-{t.price}₪</div>
+                        {/* מחיר דינמי */}
+                        <div style={{fontSize:17,fontWeight:800,color:'#111'}}>מ-{t.price || 0}₪</div>
                         <div style={{fontSize:11,color:'#bbb',marginTop:1}}>60 דקות</div>
                       </div>
                       <a href={waHref(t)} target="_blank" rel="noopener noreferrer" className="wa-btn"
@@ -498,7 +487,7 @@ export default function Home() {
         </div>
       </main>
 
-      {/* ARTICLES SECTION - תבניות למאמרים שפותחות Modal */}
+      {/* ARTICLES SECTION */}
       <section style={{background:'#fff',padding:'60px 16px',borderTop:'1px solid #efefef'}}>
         <div style={{maxWidth:1140,margin:'0 auto'}}>
           <div style={{textAlign:'center',marginBottom:40}}>
