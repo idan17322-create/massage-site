@@ -38,6 +38,7 @@ export default function Join() {
 
   function toggleType(t) {
     setTypes(prev => prev.includes(t) ? prev.filter(x => x !== t) : [...prev, t])
+    if (errors.types) setErrors({ ...errors, types: '' })
   }
 
   function handleImage(e) {
@@ -51,11 +52,14 @@ export default function Join() {
 
   function validate() {
     const e = {}
-    if (!form.name.trim()) e.name = 'שם חובה'
-    if (!form.phone.match(/^0[0-9]{9}$/)) e.phone = 'מספר לא תקין'
-    if (!form.city.trim()) e.city = 'חובה להזין עיר'
+    if (!form.name.trim()) e.name = 'שם מלא חסר'
+    
+    const cleanPhone = form.phone.replace(/[^0-9]/g, '')
+    if (cleanPhone.length < 9 || cleanPhone.length > 10) e.phone = 'מספר טלפון לא תקין'
+    
+    if (!form.city.trim()) e.city = 'עיר חסרה'
     if (!form.gender) e.gender = 'נא לבחור מגדר'
-    if (!form.price) e.price = 'נא להזין מחיר התחלתי'
+    if (!form.price) e.price = 'מחיר חסר'
     if (types.length === 0) e.types = 'בחר לפחות טיפול אחד'
     if (!agreed) e.agreed = 'יש לאשר את התנאים'
     return e
@@ -63,8 +67,13 @@ export default function Join() {
 
   async function handleSubmit(e) {
     e.preventDefault()
+    setErrors({})
+    
     const errs = validate()
-    if (Object.keys(errs).length) { setErrors(errs); return }
+    if (Object.keys(errs).length) { 
+      setErrors(errs); 
+      return; 
+    }
     
     setLoading(true)
     let imageUrl = null
@@ -103,7 +112,7 @@ export default function Join() {
   }
 
   const inpStyle = (err) => ({
-    width: '100%', border: `1.5px solid ${err ? '#f87171' : '#efefef'}`,
+    width: '100%', border: `1.5px solid ${err ? '#ef4444' : '#efefef'}`,
     borderRadius: 14, padding: '12px', fontSize: 14, background: '#fafafa', fontFamily: 'inherit'
   })
 
@@ -128,7 +137,7 @@ export default function Join() {
           <div onClick={() => document.getElementById('img-input').click()} style={{ width: 100, height: 100, borderRadius: '50%', background: '#eee', margin: '0 auto', cursor: 'pointer', overflow: 'hidden', border: '2px dashed #ccc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {imagePreview ? <img src={imagePreview} style={{width:'100%', height:'100%', objectFit:'cover'}} /> : '📷'}
           </div>
-          <input id="img-input" type="file" hidden onChange={handleImage} />
+          <input id="img-input" type="file" hidden onChange={handleImage} accept="image/*" />
         </div>
 
         <div>
@@ -136,38 +145,50 @@ export default function Join() {
           <input name="name" value={form.name} onChange={handleInput} style={inpStyle(errors.name)} />
         </div>
 
-        <div>
-          <label style={{display:'block', marginBottom:5, fontSize:13, fontWeight:700}}>מגדר *</label>
-          <div style={{display:'flex', gap:10}}>
-            {['male', 'female'].map(g => (
-              <button type="button" key={g} onClick={() => setForm({...form, gender: g})} style={{ flex: 1, padding: '10px', borderRadius: 12, border: '1.5px solid', cursor:'pointer', background: form.gender === g ? '#0F6E56' : '#fff', color: form.gender === g ? '#fff' : '#555', borderColor: form.gender === g ? '#0F6E56' : '#eee' }}>
-                {g === 'male' ? 'גבר' : 'אישה'}
-              </button>
-            ))}
+        <div style={{display:'grid', gridTemplateColumns: '1fr 1fr', gap:10}}>
+          <div>
+            <label style={{display:'block', marginBottom:5, fontSize:13, fontWeight:700}}>מגדר *</label>
+            <div style={{display:'flex', gap:10}}>
+              {['male', 'female'].map(g => (
+                <button type="button" key={g} onClick={() => {setForm({...form, gender: g}); setErrors({...errors, gender: ''})}} style={{ flex: 1, padding: '10px', borderRadius: 12, border: `1.5px solid ${errors.gender ? '#ef4444' : (form.gender === g ? '#0F6E56' : '#eee')}`, cursor:'pointer', background: form.gender === g ? '#0F6E56' : '#fff', color: form.gender === g ? '#fff' : '#555' }}>
+                  {g === 'male' ? 'גבר' : 'אישה'}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <label style={{display:'block', marginBottom:5, fontSize:13, fontWeight:700}}>טלפון *</label>
+            <input name="phone" value={form.phone} onChange={handleInput} placeholder="050-0000000" style={inpStyle(errors.phone)} dir="ltr" />
           </div>
         </div>
 
         <div style={{display:'grid', gridTemplateColumns: '1fr 1fr', gap:10}}>
           <div>
-            <label style={{display:'block', marginBottom:5, fontSize:13, fontWeight:700}}>עיר *</label>
+            <label style={{display:'block', marginBottom:5, fontSize:13, fontWeight:700}}>עיר פעילות *</label>
             <input name="city" value={form.city} onChange={handleInput} style={inpStyle(errors.city)} />
           </div>
           <div>
             <label style={{display:'block', marginBottom:5, fontSize:13, fontWeight:700}}>מחיר התחלתי (₪) *</label>
-            <input name="price" type="number" value={form.price} onChange={handleInput} placeholder="למשל: 250" style={inpStyle(errors.price)} />
+            <input name="price" type="number" value={form.price} onChange={handleInput} placeholder="250" style={inpStyle(errors.price)} />
+          </div>
+        </div>
+
+        <div style={{display:'grid', gridTemplateColumns: '1fr 1fr', gap:10}}>
+          <div>
+            <label style={{display:'block', marginBottom:5, fontSize:13, fontWeight:700}}>שנות ניסיון</label>
+            <input name="experience" type="number" value={form.experience} onChange={handleInput} placeholder="למשל: 5" style={inpStyle()} />
+          </div>
+          <div style={{display:'flex', alignItems:'center'}}>
+            <label style={{display:'flex', alignItems:'center', gap:10, cursor:'pointer', fontSize:13, fontWeight: 700, marginTop: 18}}>
+              <input type="checkbox" name="is_mobile" checked={form.is_mobile} onChange={handleInput} style={{width:18, height:18}} />
+              שירות נייד (עד הבית)
+            </label>
           </div>
         </div>
 
         <div>
-          <label style={{display:'flex', alignItems:'center', gap:10, cursor:'pointer', fontSize:14}}>
-            <input type="checkbox" name="is_mobile" checked={form.is_mobile} onChange={handleInput} style={{width:18, height:18}} />
-            אני נותן שירות נייד (מגיע לבית הלקוח)
-          </label>
-        </div>
-
-        <div>
-          <label style={{display:'block', marginBottom:10, fontSize:13, fontWeight:700}}>סוגי טיפולים *</label>
-          <div style={{display:'flex', flexWrap:'wrap', gap:6}}>
+          <label style={{display:'block', marginBottom:10, fontSize:13, fontWeight:700}}>סוגי טיפולים (בחר לפחות אחד) *</label>
+          <div style={{display:'flex', flexWrap:'wrap', gap:6, padding: errors.types ? 8 : 0, border: errors.types ? '1.5px solid #ef4444' : 'none', borderRadius: 14}}>
             {TYPE_CATEGORIES.flatMap(c => c.types).map(t => (
               <button type="button" key={t} onClick={() => toggleType(t)} style={{ padding:'6px 12px', borderRadius:20, border:'1.5px solid', fontSize:12, cursor:'pointer', background: types.includes(t) ? '#E1F5EE' : '#fff', color: types.includes(t) ? '#0F6E56' : '#777', borderColor: types.includes(t) ? '#0F6E56' : '#eee' }}>{t}</button>
             ))}
@@ -175,18 +196,24 @@ export default function Join() {
         </div>
 
         <div>
-          <label style={{display:'block', marginBottom:5, fontSize:13, fontWeight:700}}>תיאור וניסיון</label>
+          <label style={{display:'block', marginBottom:5, fontSize:13, fontWeight:700}}>תיאור וניסיון (אופציונלי)</label>
           <textarea name="description" value={form.description} onChange={handleInput} rows={3} style={inpStyle()} />
         </div>
 
-        <div style={{padding: 15, background: '#fef3c7', borderRadius: 12, fontSize: 12}}>
+        <div style={{padding: 15, background: errors.agreed ? '#fef2f2' : '#fef3c7', border: errors.agreed ? '1px solid #ef4444' : 'none', borderRadius: 12, fontSize: 12}}>
           <label style={{display:'flex', gap:10, cursor:'pointer'}}>
-            <input type="checkbox" checked={agreed} onChange={e => setAgreed(e.target.checked)} />
+            <input type="checkbox" checked={agreed} onChange={e => {setAgreed(e.target.checked); setErrors({...errors, agreed: ''})}} />
             {LEGAL_CONSENT}
           </label>
         </div>
 
-        <button type="submit" disabled={loading} style={{ background: '#0F6E56', color: '#fff', border: 'none', padding: '16px', borderRadius: 14, fontWeight: 700, fontSize: 16, cursor: 'pointer' }}>
+        {Object.keys(errors).length > 0 && (
+          <div style={{background: '#fef2f2', color: '#b91c1c', padding: 12, borderRadius: 12, fontSize: 13, fontWeight: 700}}>
+            שים לב: {Object.values(errors).filter(err => err !== '').join(' | ')}
+          </div>
+        )}
+
+        <button type="submit" disabled={loading} style={{ background: '#0F6E56', color: '#fff', border: 'none', padding: '16px', borderRadius: 14, fontWeight: 700, fontSize: 16, cursor: loading ? 'not-allowed' : 'pointer' }}>
           {loading ? 'שולח...' : 'שלח בקשת הרשמה'}
         </button>
 
