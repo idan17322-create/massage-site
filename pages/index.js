@@ -99,7 +99,7 @@ export default function Home() {
   const [q, setQ]                 = useState('')
   const [area, setArea]           = useState('')
   const [type, setType]           = useState('')
-  const [gender, setGender]       = useState('') // הוספת סינון למגדר
+  const [gender, setGender]       = useState('') 
   const [quizTypes, setQuizTypes] = useState([])
   const [scrolled, setScrolled]   = useState(false)
   const [fontSize, setFontSize]   = useState(100)
@@ -147,7 +147,7 @@ export default function Home() {
     }
     if (area) r = r.filter(t => t.city === area || t.area === area)
     if (type) r = r.filter(t => (t.types||[]).includes(type))
-    if (gender) r = r.filter(t => t.gender === gender) // סינון לפי זכר/נקבה
+    if (gender) r = r.filter(t => t.gender === gender) 
     if (quizTypes.length > 0)
       r = r.filter(t => (t.types||[]).some(x => quizTypes.includes(x)))
     setShow(r)
@@ -346,7 +346,6 @@ export default function Home() {
                 {TYPES.map(t=><option key={t}>{t}</option>)}
               </select>
 
-              {/* סינון לפי מגדר */}
               <select value={gender} onChange={e=>setGender(e.target.value)} aria-label="סינון לפי מגדר"
                 style={{border:'1.5px solid #efefef',borderRadius:14,padding:'11px 12px',fontSize:13,color:'#444',background:'#fafafa',fontFamily:'inherit',width:'100%',cursor:'pointer'}}>
                 <option value="">גבר/אישה</option>
@@ -438,11 +437,11 @@ export default function Home() {
                         <div style={{display:'flex',alignItems:'center',gap:6,flexWrap:'wrap',marginBottom:3}}>
                           <span style={{fontSize:15,fontWeight:700,color:'#111'}}>{t.name}</span>
                           <span style={{background:'#E1F5EE',color:'#065F46',fontSize:10,padding:'2px 7px',borderRadius:10,fontWeight:700}}>מאושר/ת</span>
-                          {/* תג מגדר חדש */}
-                          <span style={{background:'#F3F4F6', color:'#4B5563', fontSize:10, padding:'2px 7px', borderRadius:10, fontWeight:700}}>{t.gender === 'male' ? 'זכר' : 'נקבה'}</span>
+                          <span style={{background:'#F3F4F6', color:'#4B5563', fontSize:10, padding:'2px 7px', borderRadius:10, fontWeight:700}}>{t.gender === 'male' ? 'גבר' : 'אישה'}</span>
                         </div>
-                        {/* דינמי: קליניקה או ניידת */}
-                        <div style={{fontSize:12,color:'#999',marginBottom:4}}>📍 {t.city||t.area} {t.is_mobile ? '· ניידת (עד הבית)' : '· קליניקה'}</div>
+                        <div style={{fontSize:12,color:'#999',marginBottom:4}}>
+                          📍 {t.city||t.area} {t.is_mobile ? (t.gender === 'male' ? '· נייד (עד הבית)' : '· ניידת (עד הבית)') : '· קליניקה'}
+                        </div>
                         {t.rating && (
                           <div style={{fontSize:12}}>
                             <span style={{color:'#F59E0B'}}>{'★'.repeat(Math.round(t.rating))}{'☆'.repeat(5-Math.round(t.rating))}</span>
@@ -451,8 +450,9 @@ export default function Home() {
                         )}
                       </div>
                     </div>
+                    {/* פירוט מלא + ירידות שורה */}
                     {t.description && (
-                      <p style={{fontSize:13,color:'#777',lineHeight:1.6,marginBottom:12,display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical',overflow:'hidden'}}>
+                      <p style={{fontSize:13,color:'#777',lineHeight:1.6,marginBottom:12,whiteSpace:'pre-line'}}>
                         {t.description}
                       </p>
                     )}
@@ -469,9 +469,8 @@ export default function Home() {
                     </div>
                     <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',borderTop:'1px solid #f5f5f3',paddingTop:12}}>
                       <div>
-                        {/* מחיר דינמי */}
+                        {/* הוסר '60 דקות' */}
                         <div style={{fontSize:17,fontWeight:800,color:'#111'}}>מ-{t.price || 0}₪</div>
-                        <div style={{fontSize:11,color:'#bbb',marginTop:1}}>60 דקות</div>
                       </div>
                       <a href={waHref(t)} target="_blank" rel="noopener noreferrer" className="wa-btn"
                         aria-label={`שלח הודעה ל${t.name}`}
@@ -541,7 +540,7 @@ export default function Home() {
             <a href="/privacy" style={{fontSize:13,color:'#aaa',textDecoration:'none'}}>פרטיות</a>
             <a href="mailto:info@maga.co.il" style={{fontSize:13,color:'#aaa',textDecoration:'none'}}>📧 קשר</a>
           </div>
-          <p style={{fontSize:12,color:'#ddd'}}>© 2024 מגע</p>
+          <p style={{fontSize:12,color:'#ddd'}}>© 2026 מגע</p>
         </div>
       </footer>
 
