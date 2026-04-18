@@ -187,11 +187,12 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>מגע — מטפלים מוסמכים אצלך או בקליניקה</title>
-        <meta name="description" content="מצא מטפל עיסוי מוסמך ומאושר בעירך." />
+        <title>מגע — מסאז' ועיסוי מקצועי עד הבית או בקליניקה</title>
+        <meta name="description" content="מחפשים מסאז' מפנק? רשת המטפלים של מגע מציעה עיסוי שוודי, רקמות עמוקות ורפואה משלימה. הזמינו עכשיו עיסוי עד הבית או בקליניקה הקרובה אליכם." />
+        <meta name="keywords" content="מסאז, עיסוי, עיסוי עד הבית, מסאז עד הבית, מטפל עיסוי, עיסוי שוודי, מסאזיסט, קליניקה לעיסוי" />
         <meta name="google-site-verification" content="D_2W63wcSNAKxCBio3dJistesVY9QYwzVLgz-k8LfR0" />
-        <meta property="og:title" content="מגע — מטפלים מוסמכים אצלך או בקליניקה" />
-        <meta property="og:description" content="מצא מטפל עיסוי מאושר בעירך תוך דקה." />
+        <meta property="og:title" content="מגע — מסאז' ועיסוי מקצועי עד הבית או בקליניקה" />
+        <meta property="og:description" content="מצא מטפל לעיסוי או מסאז' מאושר בעירך תוך דקה." />
         <meta property="og:type" content="website" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <style>{`
@@ -305,10 +306,10 @@ export default function Home() {
 
         <div className="fade-up hero-pad" style={{position:'relative',zIndex:2,textAlign:'center',padding:'80px 24px 40px',maxWidth:680,width:'100%'}}>
           <div style={{display:'inline-block',background:'rgba(255,255,255,0.15)',backdropFilter:'blur(10px)',border:'1px solid rgba(255,255,255,0.2)',borderRadius:30,padding:'5px 16px',fontSize:11,color:'rgba(255,255,255,0.9)',letterSpacing:'1.5px',textTransform:'uppercase',marginBottom:20,fontWeight:600}}>
-            פלטפורמת העיסוי #1 בישראל
+            פלטפורמת העיסוי והמסאז' #1 בישראל
           </div>
           <h1 className="hero-title" style={{color:'#fff',fontSize:48,fontWeight:800,lineHeight:1.1,marginBottom:12,letterSpacing:'-0.8px',textShadow:'0 2px 20px rgba(0,0,0,0.3)'}}>
-            מטפל מוסמך<br /><span style={{color:'#6EE7B7'}}>אצלך או בקליניקה</span>
+            עיסוי מקצועי<br /><span style={{color:'#6EE7B7'}}>עד הבית או בקליניקה</span>
           </h1>
           <p style={{color:'rgba(255,255,255,0.8)',fontSize:18,marginBottom:24,lineHeight:1.7}}>
             חווית הטיפול המושלמת, בהתאמה אישית.<br />המטפלים המובילים בישראל, עכשיו בהישג ידכם.
@@ -328,7 +329,7 @@ export default function Home() {
             <div style={{position:'relative',marginBottom:10}}>
               <span style={{position:'absolute',right:14,top:'50%',transform:'translateY(-50%)',fontSize:16,color:'#bbb',pointerEvents:'none'}}>🔍</span>
               <input value={q} onChange={e=>setQ(e.target.value)}
-                placeholder="חפש לפי שם, עיר או סוג טיפול..."
+                placeholder="חפש מסאז', עיר או מטפל..."
                 aria-label="חיפוש מטפל"
                 style={{width:'100%',border:'1.5px solid #efefef',borderRadius:14,padding:'12px 44px 12px 14px',fontSize:14,color:'#111',background:'#fafafa',fontFamily:'inherit',boxSizing:'border-box'}} />
             </div>
@@ -355,7 +356,7 @@ export default function Home() {
             </div>
 
             <button onClick={openQuiz} style={{marginTop: 12, width: '100%', background: 'linear-gradient(135deg, #E1F5EE, #C6EADD)', color: '#0F6E56', borderRadius: 14, padding: '12px', fontSize: 14, fontWeight: 700, border: '1px solid #9FE1CB', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8, transition: 'all 0.2s'}}>
-              <span>✨</span> לא בטוחים איזה עיסוי מתאים לכם? נסו את המחשבון
+              <span>✨</span> לא בטוחים איזה מסאז' מתאים לכם?
             </button>
           </div>
         </div>
@@ -439,9 +440,7 @@ export default function Home() {
                           <span style={{background:'#E1F5EE',color:'#065F46',fontSize:10,padding:'2px 7px',borderRadius:10,fontWeight:700}}>מאושר/ת</span>
                           <span style={{background:'#F3F4F6', color:'#4B5563', fontSize:10, padding:'2px 7px', borderRadius:10, fontWeight:700}}>{t.gender === 'male' ? 'גבר' : 'אישה'}</span>
                         </div>
-                        <div style={{fontSize:12,color:'#999',marginBottom:4}}>
-                          📍 {t.city||t.area} {t.is_mobile ? (t.gender === 'male' ? '· נייד (עד הבית)' : '· ניידת (עד הבית)') : '· קליניקה'}
-                        </div>
+                        <div style={{fontSize:12,color:'#999',marginBottom:4}}>📍 {t.city||t.area} {t.is_mobile ? (t.gender === 'male' ? '· נייד (עד הבית)' : '· ניידת (עד הבית)') : '· קליניקה'}</div>
                         {t.rating && (
                           <div style={{fontSize:12}}>
                             <span style={{color:'#F59E0B'}}>{'★'.repeat(Math.round(t.rating))}{'☆'.repeat(5-Math.round(t.rating))}</span>
@@ -511,6 +510,17 @@ export default function Home() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* SEO SECTION - פצצת מילות מפתח לגוגל */}
+      <section style={{background:'#f9f9f7',padding:'40px 16px', borderTop:'1px solid #efefef', textAlign:'center'}}>
+        <div style={{maxWidth:900, margin:'0 auto'}}>
+          <h3 style={{fontSize:16, fontWeight:700, color:'#333', marginBottom:12}}>הזמנת מסאז' בקליק בכל הארץ</h3>
+          <p style={{fontSize:13, color:'#777', lineHeight:1.8}}>
+            פורטל "מגע" מרכז עבורכם את מיטב המטפלים המוסמכים בישראל. בין אם אתם מחפשים <strong>מסאז' מפנק לסוף השבוע</strong>, שחרור שרירים תפוסים, עיסוי שוודי, רקמות עמוקות או טיפול בכוסות רוח – כאן תמצאו את המטפל המדויק עבורכם. <br/>
+            שירותי עיסוי זמינים בפריסה ארצית נרחבת: <strong>עיסוי בתל אביב, מסאז' בפתח תקווה, טיפול בירושלים, ראשון לציון, חיפה, באר שבע</strong> ועוד עשרות ערים ברחבי הארץ. בחרו את העיר שלכם בתיבת החיפוש ותאמו טיפול עד הבית או בקליניקה, ללא עמלות תיווך.
+          </p>
         </div>
       </section>
 
